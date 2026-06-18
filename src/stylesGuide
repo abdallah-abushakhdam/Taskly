@@ -1,0 +1,47 @@
+/*
+
+*****************COLORS*****************
+
+primary Color : #003D9B
+primary container : #0052CC
+surface high : #D7E2FF
+surface low : #F1F3FF
+background : #F9F9FF
+
+
+*****************ICONS*****************
+
+dashboard : /icons/dashboard.svg
+monitoring : /icons/monitor.svg
+inventory : /icons/inventory.svg
+groups : /icons/groups.svg
+description : /icons/description.svg
+mail  : /icons/mail.svg
+event : /icons/event.svg
+setteings : /icons/settings.svg
+shield : /icons/shield.svg
+hub : /icons/hub.svg
+rocket : /icons/rocket.svg
+archetecture : /icons/architecture.svg
+
+
+*****************BOTTOM NAV BAR ICONS*****************
+
+projects : /icons/projects.svg
+epics : /icons/epics.svg
+tasks : /icons/tasks.svg
+members : /icons/members.svg
+details : /icons/details.svg
+
+
+*****************TYPOGRAPHY*****************
+
+display-lg
+heading-lg
+title-md  
+body-md 
+label-sm  
+
+
+
+*/
