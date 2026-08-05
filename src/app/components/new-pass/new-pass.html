@@ -1,0 +1,188 @@
+<div class="page-wrapper">
+  <!-- Desktop Logo -->
+  <div class="logo-desktop">
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+      <rect width="18" height="18" rx="4" fill="#0D3086" />
+      <path
+        d="M5 9l3 3 5-5"
+        stroke="#fff"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+    TASKLY
+  </div>
+
+  <!-- Card -->
+  <div class="card">
+    <!-- Mobile Logo -->
+    <div class="logo-mobile">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+        <rect width="18" height="18" rx="4" fill="#0D3086" />
+        <path
+          d="M5 9l3 3 5-5"
+          stroke="#fff"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+      TASKLY
+    </div>
+
+    <h2>Create a New Password</h2>
+    <p class="subtitle">Create a new, strong password to secure your workstation access.</p>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <!-- New Password -->
+      <div class="form-group">
+        <label>NEW PASSWORD</label>
+        <div class="input-wrap">
+          <input
+            [type]="showPassword ? 'text' : 'password'"
+            formControlName="password"
+            placeholder="••••••••"
+            [class.invalid]="isInvalid('password')"
+            aria-label="New password"
+          />
+          <button type="button" class="eye-btn" (click)="showPassword = !showPassword">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              @if (showPassword) {
+                <path
+                  d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94"
+                />
+                <path d="M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19" />
+                <line x1="1" y1="1" x2="23" y2="23" />
+              } @else {
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                <circle cx="12" cy="12" r="3" />
+              }
+            </svg>
+          </button>
+        </div>
+        @if (isInvalid('password')) {
+          <span class="error">Password must be at least 8 characters.</span>
+        }
+      </div>
+
+      <!-- Confirm Password -->
+      <div class="form-group">
+        <label>CONFIRM PASSWORD</label>
+        <input
+          [type]="showPassword ? 'text' : 'password'"
+          formControlName="confirmPassword"
+          placeholder="••••••••"
+          [class.invalid]="isInvalid('confirmPassword') || !!form.errors?.['passwordMismatch']"
+          aria-label="Confirm password"
+        />
+        @if (form.errors?.['passwordMismatch'] && form.get('confirmPassword')?.touched) {
+          <span class="error">Passwords do not match.</span>
+        }
+      </div>
+
+      <!-- Security Requirements -->
+      <div class="requirements-box">
+        <p class="requirements-label">SECURITY REQUIREMENTS</p>
+        <div class="requirements-grid">
+          <div class="rule" [class.met]="hasMinLength()">
+            <div class="rule-dot" [class.checked]="hasMinLength()">
+              @if (hasMinLength()) {
+                <svg width="8" height="8" viewBox="0 0 10 10" fill="none">
+                  <path
+                    d="M2 5l2.5 2.5L8 3"
+                    stroke="#fff"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              }
+            </div>
+            8 - 64 characters
+          </div>
+
+          <div class="rule" [class.met]="hasUppercase() && hasLowercase()">
+            <div class="rule-dot" [class.checked]="hasUppercase() && hasLowercase()">
+              @if (hasUppercase() && hasLowercase()) {
+                <svg width="8" height="8" viewBox="0 0 10 10" fill="none">
+                  <path
+                    d="M2 5l2.5 2.5L8 3"
+                    stroke="#fff"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              }
+            </div>
+            Uppercase & Lowercase
+          </div>
+
+          <div class="rule" [class.met]="hasDigit()">
+            <div class="rule-dot" [class.checked]="hasDigit()">
+              @if (hasDigit()) {
+                <svg width="8" height="8" viewBox="0 0 10 10" fill="none">
+                  <path
+                    d="M2 5l2.5 2.5L8 3"
+                    stroke="#fff"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              }
+            </div>
+            At least one digit
+          </div>
+
+          <div class="rule" [class.met]="hasSpecial()">
+            <div class="rule-dot" [class.checked]="hasSpecial()">
+              @if (hasSpecial()) {
+                <svg width="8" height="8" viewBox="0 0 10 10" fill="none">
+                  <path
+                    d="M2 5l2.5 2.5L8 3"
+                    stroke="#fff"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              }
+            </div>
+            Special character (e.g. !@#$)
+          </div>
+        </div>
+      </div>
+
+      <!-- Error / Success -->
+      @if (errorMessage()) {
+        <div class="error-banner" role="alert">{{ errorMessage() }}</div>
+      }
+      @if (successMessage()) {
+        <div class="success-banner" role="alert">{{ successMessage() }}</div>
+      }
+
+      <!-- Submit -->
+      <button type="submit" class="btn-primary" [disabled]="form.invalid || isLoading()">
+        @if (isLoading()) {
+          <span class="spinner" aria-hidden="true"></span>
+          Updating...
+        } @else {
+          Update Password
+        }
+      </button>
+    </form>
+
+    <a routerLink="/auth/login" class="back-link">Back to sign in</a>
+  </div>
+</div>

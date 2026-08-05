@@ -1,0 +1,156 @@
+<div class="new-task-page">
+  <!-- Breadcrumb -->
+  <div class="breadcrumb">
+    <a routerLink="/project" class="breadcrumb-link">PROJECTS</a>
+    <span class="breadcrumb-sep">›</span>
+    <span class="breadcrumb-link">PROJECT ALPHA</span>
+    <span class="breadcrumb-sep">›</span>
+    <a routerLink="/tasks" class="breadcrumb-link">TASKS</a>
+    <span class="breadcrumb-sep">›</span>
+    <span class="breadcrumb-current">NEW TASK</span>
+  </div>
+
+  <!-- Page Title -->
+  <div class="page-title-section">
+    <h1 class="page-title">Create New Task</h1>
+    <p class="page-subtitle">
+      Initialize a new work item within the Architectural Workspace ecosystem.
+    </p>
+  </div>
+
+  <!-- Card -->
+  <div class="card">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <!-- Title -->
+      <div class="form-group">
+        <label>TITLE <span class="required">*</span></label>
+        <input
+          type="text"
+          formControlName="title"
+          placeholder="e.g. Finalize structural schematics"
+          [class.invalid]="isInvalid('title')"
+        />
+        @if (isInvalid('title')) {
+          <div class="error-row">
+            <svg
+              width="12"
+              height="12"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#E03030"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="8" x2="12" y2="12" />
+              <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
+            <span class="error">Title is required (minimum 3 characters).</span>
+          </div>
+        }
+      </div>
+
+      <!-- Status + Assignee -->
+      <div class="form-row">
+        <div class="form-group">
+          <label>STATUS <span class="required">*</span></label>
+          <div class="select-wrap">
+            <select formControlName="status">
+              <option value="todo">TO DO</option>
+              <option value="in-progress">IN PROGRESS</option>
+              <option value="done">DONE</option>
+              <option value="blocked">BLOCKED</option>
+            </select>
+            <svg
+              class="select-arrow"
+              width="12"
+              height="12"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#4F5B76"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <polyline points="6 9 12 15 18 9" />
+            </svg>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>ASSIGNEE</label>
+          <div class="select-wrap">
+            <select formControlName="assignee">
+              <option value="">Select Team Member</option>
+              <option value="alice">Alice Moore</option>
+              <option value="sarah">Sarah Jenkins</option>
+              <option value="david">David Lee</option>
+              <option value="alisa">Alisa Mayer</option>
+            </select>
+            <svg
+              class="select-arrow"
+              width="12"
+              height="12"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#4F5B76"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <polyline points="6 9 12 15 18 9" />
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Epic -->
+      <div class="form-group">
+        <label>EPIC</label>
+        <div class="select-wrap">
+          <select formControlName="epic">
+            <option value="">Select Epic Link</option>
+            <option value="epic-102">EPIC-102 - Sustainable Materials Integration</option>
+          </select>
+          <svg
+            class="select-arrow"
+            width="12"
+            height="12"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#4F5B76"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <polyline points="6 9 12 15 18 9" />
+          </svg>
+        </div>
+      </div>
+
+      <!-- Due Date -->
+      <div class="form-group">
+        <label>DUE DATE</label>
+        <input type="date" formControlName="dueDate" placeholder="mm/dd/yyyy" />
+      </div>
+
+      <!-- Description -->
+      <div class="form-group">
+        <label>DESCRIPTION</label>
+        <textarea
+          formControlName="description"
+          placeholder="Provide detailed context for this task..."
+          rows="4"
+          maxlength="500"
+        ></textarea>
+      </div>
+
+      <!-- Actions -->
+      <div class="form-actions">
+        <button type="button" class="btn-back" (click)="back()">Back</button>
+        <button type="submit" class="btn-submit" [disabled]="form.invalid">Create Task</button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,167 @@
+<div class="page-wrapper">
+  <!-- Logo -->
+
+  <!-- Card -->
+  <div class="card">
+    <h2>Create your workspace</h2>
+    <p class="subtitle">Join the editorial approach to task management.</p>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <!-- Name -->
+      <div class="form-group name-group">
+        <label>NAME</label>
+        <input
+          type="text"
+          formControlName="name"
+          placeholder="Enter your full name"
+          [class.invalid]="isInvalid('name')"
+        />
+        <span class="hint">3-50 characters, letters only.</span>
+        @if (isInvalid('name')) {
+          <span class="error">
+            {{
+              form.get('name')?.errors?.['required']
+                ? 'Name is required.'
+                : 'Letters only, 3–50 characters.'
+            }}
+          </span>
+        }
+      </div>
+
+      <!-- Email -->
+      <div class="form-group email-group">
+        <label>EMAIL</label>
+        <input
+          type="email"
+          formControlName="email"
+          placeholder="yourname@company.com"
+          [class.invalid]="isInvalid('email')"
+        />
+        @if (isInvalid('email')) {
+          <span class="error">Invalid email.</span>
+        }
+      </div>
+
+      <!-- Job Title -->
+      <div class="form-group job-group">
+        <label>JOB TITLE <span class="optional">(OPTIONAL)</span></label>
+        <input type="text" formControlName="jobTitle" placeholder="e.g. Project Manager" />
+      </div>
+
+      <!-- Password Row -->
+      <div class="form-row">
+        <div class="form-group">
+          <label>PASSWORD</label>
+          <div class="input-wrap">
+            <input
+              [type]="showPassword ? 'text' : 'password'"
+              formControlName="password"
+              placeholder="Password"
+              [class.invalid]="isInvalid('password')"
+            />
+            <button type="button" class="eye-btn" (click)="showPassword = !showPassword">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                @if (showPassword) {
+                  <path
+                    d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94"
+                  />
+                  <path d="M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19" />
+                  <line x1="1" y1="1" x2="23" y2="23" />
+                } @else {
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                  <circle cx="12" cy="12" r="3" />
+                }
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>CONFIRM PASSWORD</label>
+          <input
+            [type]="showPassword ? 'text' : 'password'"
+            formControlName="confirmPassword"
+            placeholder="Repeat your password"
+            [class.invalid]="isInvalid('confirmPassword') || !!form.errors?.['passwordMismatch']"
+          />
+        </div>
+      </div>
+
+      @if (form.errors?.['passwordMismatch'] && form.get('confirmPassword')?.touched) {
+        <span class="error">Passwords do not match.</span>
+      }
+
+      <!-- Password Rules -->
+      <div class="rules-box">
+        <div class="rule" [class.met]="hasMinLength()">
+          <div class="rule-dot" [class.checked]="hasMinLength()">
+            @if (hasMinLength()) {
+              <svg width="8" height="8" viewBox="0 0 10 10" fill="none">
+                <path
+                  d="M2 5l2.5 2.5L8 3"
+                  stroke="#fff"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            }
+          </div>
+          At least 8 characters
+        </div>
+
+        <div class="rule" [class.met]="hasUpperLowerDigit()">
+          <div class="rule-dot" [class.checked]="hasUpperLowerDigit()">
+            @if (hasUpperLowerDigit()) {
+              <svg width="8" height="8" viewBox="0 0 10 10" fill="none">
+                <path
+                  d="M2 5l2.5 2.5L8 3"
+                  stroke="#fff"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            }
+          </div>
+          One uppercase, lowercase, and digit
+        </div>
+
+        <div class="rule" [class.met]="hasSpecial()">
+          <div class="rule-dot" [class.checked]="hasSpecial()">
+            @if (hasSpecial()) {
+              <svg width="8" height="8" viewBox="0 0 10 10" fill="none">
+                <path
+                  d="M2 5l2.5 2.5L8 3"
+                  stroke="#fff"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            }
+          </div>
+          One special character
+        </div>
+      </div>
+
+      <!-- Submit -->
+      @if (errorMessage()) {
+        <div class="error-banner" role="alert">{{ errorMessage() }}</div>
+      }
+      <button type="submit" class="btn-primary" [disabled]="form.invalid">Create Account</button>
+    </form>
+
+    <!-- Footer -->
+    <p class="auth-footer">Already have an account? <a routerLink="/auth/login">Log in</a></p>
+  </div>
+</div>

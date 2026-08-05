@@ -1,0 +1,1084 @@
+.tasks-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  height: 100%;
+}
+
+/* ─── Breadcrumb ────────────────────────────────── */
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.05rem;
+  font-family: Inter, sans-serif;
+}
+
+.breadcrumb-link {
+  color: #4f5b76;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.breadcrumb-link:hover {
+  color: #0d3086;
+}
+
+.breadcrumb-sep {
+  color: #b0c2e8;
+}
+
+.breadcrumb-current {
+  color: #0d3086;
+  text-transform: uppercase;
+}
+
+/* ─── Header ────────────────────────────────────── */
+.page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 54.5rem;
+}
+
+.page-title {
+  font-family: Inter, sans-serif;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #141b2c;
+  margin: 0 0 0.25rem;
+}
+
+.page-subtitle {
+  font-family: Inter, sans-serif;
+  font-size: 0.8125rem;
+  color: #4f5b76;
+  margin: 0;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  flex-shrink: 0;
+}
+
+/* ─── Search ────────────────────────────────────── */
+.search-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.875rem;
+  background: #ffffff;
+  border: 0.0625rem solid #e0e8f5;
+  border-radius: 0.375rem;
+  width: 12rem;
+  background: #d7e2ff;
+}
+
+.search-wrap input {
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 0.8125rem;
+  color: #141b2c;
+  font-family: Inter, sans-serif;
+  width: 100%;
+}
+
+.search-wrap input::placeholder {
+  color: #6b7280;
+}
+
+/* ─── View Button ───────────────────────────────── */
+.btn-view {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.5rem 0.875rem;
+  background: #ffffff;
+  border: 0.0625rem solid #e0e8f5;
+  border-radius: 0.375rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #141b2c;
+  cursor: pointer;
+  font-family: Inter, sans-serif;
+  white-space: nowrap;
+  transition: background 0.15s;
+}
+
+.btn-view:hover {
+  background: #f0f4fc;
+}
+
+/* ─── Filter Button ─────────────────────────────── */
+.btn-filter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  background: #ffffff;
+  border: 0.0625rem solid #e0e8f5;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  color: #4f5b76;
+  transition: background 0.15s;
+}
+
+.btn-filter:hover {
+  background: #f0f4fc;
+}
+
+/* ─── Board ─────────────────────────────────────── */
+.board {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  padding-bottom: 1rem;
+  flex: 1;
+}
+
+.board::-webkit-scrollbar {
+  height: 0.375rem;
+}
+.board::-webkit-scrollbar-track {
+  background: #f0f4fc;
+  border-radius: 1rem;
+}
+.board::-webkit-scrollbar-thumb {
+  background: #c0c8d8;
+  border-radius: 1rem;
+}
+
+/* ─── Column ────────────────────────────────────── */
+.column {
+  min-width: 17.5rem;
+  max-width: 17.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* ─── Column Header ─────────────────────────────── */
+.column-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 0.25rem;
+}
+
+.column-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.col-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.col-dot.todo {
+  background: #b0c2e8;
+}
+.col-dot.in-progress {
+  background: #0d3086;
+}
+.col-dot.blocked {
+  background: #e03030;
+}
+
+.col-name {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #141b2c;
+  letter-spacing: 0.03rem;
+  font-family: Inter, sans-serif;
+}
+
+.col-count {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: #4f5b76;
+  background: #f0f4fc;
+  padding: 0.125rem 0.5rem;
+  border-radius: 1rem;
+  font-family: Inter, sans-serif;
+}
+
+.col-add-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #b0c2e8;
+  display: flex;
+  align-items: center;
+  padding: 0.25rem;
+  border-radius: 0.25rem;
+  transition: all 0.15s;
+}
+
+.col-add-btn:hover {
+  background: #f0f4fc;
+  color: #0d3086;
+}
+
+/* ─── Add Task Row ──────────────────────────────── */
+.add-task-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 0.75rem;
+  background: transparent;
+  border: 0.09375rem dashed #c0c8d8;
+  border-radius: 0.5rem;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: #b0c2e8;
+  cursor: pointer;
+  letter-spacing: 0.03rem;
+  font-family: Inter, sans-serif;
+  transition: all 0.15s;
+  width: 100%;
+}
+
+.add-task-row:hover {
+  border-color: #0d3086;
+  color: #0d3086;
+}
+
+/* ─── Task List ─────────────────────────────────── */
+.task-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* ─── Task Card ─────────────────────────────────── */
+.task-card {
+  background: #ffffff;
+  border-radius: 0.625rem;
+  padding: 0.875rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  box-shadow: 0 0.0625rem 0.25rem rgba(13, 48, 134, 0.06);
+  cursor: pointer;
+  transition: box-shadow 0.2s;
+}
+
+.task-card:hover {
+  box-shadow: 0 0.25rem 1rem rgba(13, 48, 134, 0.12);
+}
+
+.task-title {
+  font-family: Inter, sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #141b2c;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ─── Task Footer ───────────────────────────────── */
+.task-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.task-date {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.6875rem;
+  color: #b0c2e8;
+  font-family: Inter, sans-serif;
+  font-weight: 500;
+}
+
+.task-avatar {
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 0.25rem;
+  color: #ffffff;
+  font-size: 0.5625rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-family: Inter, sans-serif;
+}
+
+/* ─── Task Badge ────────────────────────────────── */
+.task-badge {
+  display: inline-block;
+  padding: 0.1875rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.03rem;
+  font-family: Inter, sans-serif;
+}
+
+.task-badge.today {
+  background: #ecfdf5;
+  color: #00d9a0;
+}
+.task-badge.delayed {
+  background: #fef2f2;
+  color: #e03030;
+}
+.task-badge.due {
+  background: #fffbeb;
+  color: #f5a800;
+}
+.view-toggle {
+  display: flex;
+  align-items: center;
+  background: #ffffff;
+  border: 0.0625rem solid #e0e8f5;
+  border-radius: 0.375rem;
+  overflow: hidden;
+}
+
+/* ─── List Card ─────────────────────────────────── */
+.list-card {
+  background: #ffffff;
+  border-radius: 1rem;
+  box-shadow: 0 0.0625rem 0.25rem rgba(13, 48, 134, 0.06);
+  overflow: hidden;
+  width: 60rem;
+  height: 27.031rem;
+}
+
+/* ─── List Header ───────────────────────────────── */
+.list-header {
+  display: grid;
+  grid-template-columns: 6rem 1fr 8rem 7rem 10rem 3rem;
+  padding: 0.75rem 1.25rem;
+  background: #fafbff;
+  border-bottom: 0.0625rem solid #f0f4fc;
+}
+
+.list-col {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: #b0c2e8;
+  letter-spacing: 0.05rem;
+  text-transform: uppercase;
+  font-family: Inter, sans-serif;
+}
+
+/* ─── List Row ──────────────────────────────────── */
+.list-row {
+  display: grid;
+  grid-template-columns: 6rem 1fr 8rem 7rem 10rem 3rem;
+  padding: 0.875rem 1.25rem;
+  border-bottom: 0.0625rem solid #f0f4fc;
+  align-items: center;
+  transition: background 0.15s;
+}
+
+.list-row:last-of-type {
+  border-bottom: none;
+}
+
+.list-row:hover {
+  background: #fafbff;
+}
+
+.task-id {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #0d3086;
+  font-family: Inter, sans-serif;
+}
+
+.list-title {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #141b2c;
+  font-family: Inter, sans-serif;
+  padding-right: 1rem;
+}
+
+.list-date {
+  font-size: 0.8125rem;
+  color: #4f5b76;
+  font-family: Inter, sans-serif;
+}
+
+/* ─── Status Badge ──────────────────────────────── */
+.status-badge {
+  display: inline-block;
+  padding: 0.25rem 0.625rem;
+  border-radius: 0.25rem;
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.03rem;
+  font-family: Inter, sans-serif;
+}
+
+.status-badge.todo {
+  background: #f0f4fc;
+  color: #4f5b76;
+}
+.status-badge.in-progress {
+  background: #eef2ff;
+  color: #0d3086;
+}
+.status-badge.blocked {
+  background: #fef2f2;
+  color: #e03030;
+}
+.status-badge.completed {
+  background: #82f9be;
+  color: #002113;
+}
+.status-badge.urgent {
+  background: #fef2f2;
+  color: #e03030;
+}
+
+/* ─── List Assignee ─────────────────────────────── */
+.list-assignee {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.assignee-name {
+  font-size: 0.8125rem;
+  color: #141b2c;
+  font-family: Inter, sans-serif;
+}
+
+/* ─── List Menu ─────────────────────────────────── */
+.list-menu-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #4f5b76;
+  display: flex;
+  align-items: center;
+  padding: 0.25rem;
+  border-radius: 0.25rem;
+  transition: background 0.15s;
+}
+
+.list-menu-btn:hover {
+  background: #f0f4fc;
+}
+
+/* ─── List Footer ───────────────────────────────── */
+.list-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.875rem 1.25rem;
+  border-top: 0.0625rem solid #f0f4fc;
+}
+
+.showing-text {
+  font-size: 0.8125rem;
+  color: #4f5b76;
+  font-family: Inter, sans-serif;
+}
+
+.list-pagination {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.page-info {
+  font-size: 0.8125rem;
+  color: #434654;
+  font-family: Inter, sans-serif;
+}
+
+.page-nav {
+  background: none;
+  border: none;
+  border-radius: 0.375rem;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #434654;
+  font-size: 1rem;
+  transition: background 0.15s;
+}
+
+.page-nav:hover {
+  background: #f0f4fc;
+}
+
+/* ─── FAB ───────────────────────────────────────── */
+.fab-btn {
+  display: none;
+}
+
+/* ─── View Dropdown ─────────────────────────────── */
+.view-dropdown {
+  position: relative;
+  cursor: pointer;
+}
+
+.view-selected {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.5rem 0.875rem;
+  background: #ffffff;
+  border: 0.0625rem solid #e0e8f5;
+  border-radius: 0.375rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #141b2c;
+  font-family: Inter, sans-serif;
+  white-space: nowrap;
+  transition: background 0.15s;
+  user-select: none;
+}
+
+.view-selected:hover {
+  background: #f0f4fc;
+}
+
+.view-menu {
+  position: absolute;
+  top: calc(100% + 0.375rem);
+  right: 0;
+  background: #ffffff;
+  border: 0.0625rem solid #e0e8f5;
+  border-radius: 0.5rem;
+  box-shadow: 0 0.25rem 1rem rgba(13, 48, 134, 0.12);
+  z-index: 50;
+  min-width: 9rem;
+  overflow: hidden;
+}
+
+.view-option {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.625rem 1rem;
+  background: none;
+  border: none;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #141b2c;
+  cursor: pointer;
+  font-family: Inter, sans-serif;
+  transition: background 0.15s;
+  text-align: left;
+}
+
+.view-option:hover {
+  background: #f0f4fc;
+}
+
+.view-option.active {
+  color: #0d3086;
+  font-weight: 600;
+  background: #eef2ff;
+}
+.btn-create-mobile {
+  display: none;
+}
+.mobile-task-list {
+  display: none;
+}
+
+/* ─── Modal Overlay ─────────────────────────────── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(13, 48, 134, 0.15);
+  backdrop-filter: blur(2px);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+/* ─── Modal Card ────────────────────────────────── */
+.modal-card {
+  display: flex;
+  flex-direction: row;
+  border-radius: 1rem;
+  box-shadow: 0 1rem 3rem rgba(13, 48, 134, 0.15);
+  overflow: hidden;
+  height: 54.375rem;
+  max-width: 95vw;
+  max-height: 90vh;
+}
+
+/* ─── Left Side ──────────────────────────────────── */
+.modal-left-side {
+  width: 36rem;
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+}
+
+/* Part 1: Header */
+.modal-header {
+  width: 36rem;
+  min-height: 10.563rem;
+  background: #ffffff;
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+
+.modal-header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.modal-header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.modal-title {
+  font-family: Inter, sans-serif;
+  font-size: 1.375rem;
+  font-weight: 700;
+  color: #141b2c;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Part 2: Description */
+.modal-description-section {
+  flex: 1;
+  width: 36rem;
+  background: #e8edff;
+  padding: 0 1.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  overflow-y: auto;
+  box-sizing: border-box;
+  background: #ffffff;
+}
+
+.modal-description {
+  background: #ffffff;
+  border-radius: 0.5rem;
+  padding: 0.875rem;
+  flex: 1;
+  border: 1px solid;
+  border-color: #d7e2ff;
+}
+
+.modal-description p {
+  font-family: Inter, sans-serif;
+  font-size: 0.875rem;
+  color: #4f5b76;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Part 3: Footer */
+.modal-footer {
+  width: 36rem;
+  height: 4.25rem;
+  background: #e8edff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.5rem;
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+
+/* ─── Right Side ─────────────────────────────────── */
+.modal-right {
+  width: 20rem;
+  background: #e8edff;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  overflow-y: auto;
+}
+
+/* ─── Shared Modal Styles ────────────────────────── */
+.modal-section-label {
+  font-size: 0.625rem;
+  font-weight: 600;
+  color: #b0c2e8;
+  letter-spacing: 0.05rem;
+  text-transform: uppercase;
+  font-family: Inter, sans-serif;
+  margin: 0 0 0.375rem;
+}
+
+.task-code-badge {
+  display: inline-block;
+  padding: 0.25rem 0.625rem;
+  background: #82f9be;
+  color: #005235;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  border-radius: 0.25rem;
+  font-family: Inter, sans-serif;
+  letter-spacing: 0.03rem;
+}
+
+.epic-select {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.375rem 0.75rem;
+  border: 0.0625rem solid #c0c8d8;
+  border-radius: 0.375rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #141b2c;
+  cursor: pointer;
+  font-family: Inter, sans-serif;
+  background: #ffffff;
+  transition: background 0.15s;
+}
+
+.epic-select:hover {
+  background: #f0f4fc;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #4f5b76;
+  display: flex;
+  align-items: center;
+  padding: 0.25rem;
+  border-radius: 0.25rem;
+  transition: background 0.15s;
+}
+
+.modal-close:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.detail-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.detail-select {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 0.875rem;
+  border: 0.0625rem solid #e0e8f5;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #141b2c;
+  cursor: pointer;
+  font-family: Inter, sans-serif;
+  transition: background 0.15s;
+  width: 100%;
+  box-sizing: border-box;
+  background: #ffffff;
+}
+
+.detail-select:hover {
+  background: #f0f4fc;
+}
+
+.detail-select.todo {
+  background: #f0f4fc;
+  color: #4f5b76;
+}
+.detail-select.in-progress {
+  background: #eef2ff;
+  color: #0d3086;
+}
+.detail-select.blocked {
+  background: #fef2f2;
+  color: #e03030;
+}
+.detail-select.completed {
+  background: #ecfdf5;
+  color: #00d9a0;
+}
+.detail-select.urgent {
+  background: #fef2f2;
+  color: #e03030;
+}
+
+.detail-user {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8125rem;
+  color: #141b2c;
+  font-family: Inter, sans-serif;
+}
+
+.detail-avatar {
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 0.25rem;
+  color: #ffffff;
+  font-size: 0.5625rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-family: Inter, sans-serif;
+}
+
+.detail-value {
+  font-size: 0.8125rem;
+  color: #4f5b76;
+  font-family: Inter, sans-serif;
+}
+
+.btn-copy {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  background: none;
+  border: none;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #4f5b76;
+  cursor: pointer;
+  font-family: Inter, sans-serif;
+  padding: 0.375rem 0.5rem;
+  border-radius: 0.375rem;
+  transition: background 0.15s;
+}
+
+.btn-copy:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.btn-close-modal {
+  padding: 0.5rem 1.5rem;
+  background: #ffffff;
+  border: none;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #141b2c;
+  cursor: pointer;
+  font-family: Inter, sans-serif;
+  transition: background 0.15s;
+}
+
+.btn-close-modal:hover {
+  background: #e0e8f5;
+}
+
+/* ─── Modal Responsive ───────────────────────────── */
+@media (max-width: 768px) {
+  .modal-overlay {
+    align-items: center;
+    padding: 1rem;
+  }
+
+  .modal-card {
+    flex-direction: column;
+    width: 100%;
+    max-height: 85vh;
+    overflow-y: auto;
+  }
+
+  .modal-left-side {
+    width: 100%;
+  }
+
+  .modal-header {
+    width: 100%;
+    min-height: auto;
+  }
+
+  .modal-description-section {
+    width: 100%;
+  }
+
+  .modal-footer {
+    width: 100%;
+  }
+
+  .modal-right {
+    width: 100%;
+  }
+}
+
+/* ─── Responsive ────────────────────────────────── */
+@media (max-width: 768px) {
+  .breadcrumb {
+    display: none;
+  }
+
+  .page-header {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .header-right {
+    width: 100%;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .search-wrap {
+    width: 100%;
+  }
+
+  .view-dropdown {
+    display: none;
+  }
+  .btn-filter {
+    display: none;
+  }
+
+  /* Mobile Create Task Button */
+  .btn-create-mobile {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem;
+    background: linear-gradient(95.71deg, #003d9b 0%, #0052cc 100%);
+    color: #ffffff;
+    border: none;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: Inter, sans-serif;
+  }
+
+  /* Hide board on mobile */
+  .board {
+    display: none;
+  }
+
+  /* Mobile task list */
+  .mobile-task-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding-bottom: 6rem;
+  }
+
+  .mobile-task-card {
+    background: #ffffff;
+    border-radius: 0.75rem;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    box-shadow: 0 0.0625rem 0.25rem rgba(13, 48, 134, 0.06);
+  }
+
+  .mobile-task-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .mobile-task-id {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: #0d3086;
+    font-family: Inter, sans-serif;
+  }
+
+  .mobile-task-title {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: #141b2c;
+    font-family: Inter, sans-serif;
+    line-height: 1.4;
+  }
+
+  .mobile-task-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .mobile-task-date {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+  }
+
+  .mobile-date-label {
+    font-size: 0.625rem;
+    font-weight: 600;
+    color: #b0c2e8;
+    letter-spacing: 0.05rem;
+    text-transform: uppercase;
+    font-family: Inter, sans-serif;
+  }
+
+  .mobile-date-value {
+    font-size: 0.8125rem;
+    color: #4f5b76;
+    font-family: Inter, sans-serif;
+  }
+
+  .mobile-task-right {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .mobile-menu-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #4f5b76;
+    display: flex;
+    align-items: center;
+    padding: 0.25rem;
+  }
+  .mobile-task-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding-bottom: 6rem;
+  }
+
+  /* Hide desktop list on mobile */
+  .list-card {
+    display: none;
+  }
+  .fab-btn {
+    display: none;
+  }
+}

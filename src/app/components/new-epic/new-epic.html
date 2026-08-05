@@ -1,0 +1,118 @@
+<div class="new-epic-page">
+  <!-- Breadcrumb -->
+  <div class="breadcrumb">
+    <a routerLink="/project" class="breadcrumb-link">PROJECTS</a>
+    <span class="breadcrumb-sep">›</span>
+    <span class="breadcrumb-link">PROJECT ALPHA</span>
+    <span class="breadcrumb-sep">›</span>
+    <a routerLink="/epics" class="breadcrumb-link">EPICS</a>
+    <span class="breadcrumb-sep">›</span>
+    <span class="breadcrumb-current">NEW EPIC</span>
+  </div>
+
+  <!-- Page Title -->
+  <div class="page-title-section">
+    <h1 class="page-title">Create New Epic</h1>
+    <p class="page-subtitle">
+      Define a major project phase or high-level milestone to group related tasks and track
+      architectural progress.
+    </p>
+  </div>
+
+  <!-- Card -->
+  <div class="card">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <!-- Title -->
+      <div class="form-group">
+        <div class="label-row">
+          <label>TITLE <span class="required">*</span></label>
+        </div>
+        <input
+          type="text"
+          formControlName="title"
+          placeholder="e.g. Structural Foundation Phase"
+          [class.invalid]="isInvalid('title')"
+        />
+        @if (isInvalid('title')) {
+          <div class="error-row">
+            <svg
+              width="12"
+              height="12"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#E03030"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="8" x2="12" y2="12" />
+              <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
+            <span class="error">
+              {{
+                form.get('title')?.errors?.['required']
+                  ? 'Title is required (minimum 3 characters).'
+                  : 'Title must be at least 3 characters.'
+              }}
+            </span>
+          </div>
+        }
+      </div>
+
+      <!-- Description -->
+      <div class="form-group">
+        <div class="label-row">
+          <label>DESCRIPTION</label>
+          <span class="optional-label">Optional</span>
+        </div>
+        <textarea
+          formControlName="description"
+          placeholder="Describe the scope and objectives of this epic..."
+          rows="4"
+          maxlength="500"
+        ></textarea>
+        <div class="char-count">{{ descCount }} / 500 characters</div>
+      </div>
+
+      <!-- Assignee + Deadline Row -->
+      <div class="form-row">
+        <div class="form-group">
+          <label>ASSIGNEE</label>
+          <div class="select-wrap">
+            <select formControlName="assignee">
+              <option value="">Select a member...</option>
+              <option value="alice">Alice Moore</option>
+              <option value="sarah">Sarah Jenkins</option>
+              <option value="david">David Lee</option>
+            </select>
+            <svg
+              class="select-arrow"
+              width="12"
+              height="12"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#4F5B76"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <polyline points="6 9 12 15 18 9" />
+            </svg>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>DEADLINE</label>
+          <input type="date" formControlName="deadline" placeholder="mm/dd/yyyy" />
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="form-actions">
+        <button type="button" class="btn-cancel" (click)="cancel()">Cancel</button>
+        <button type="submit" class="btn-submit" [disabled]="form.invalid">Create Epic</button>
+      </div>
+    </form>
+  </div>
+</div>

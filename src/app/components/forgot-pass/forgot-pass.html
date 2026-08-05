@@ -1,0 +1,116 @@
+<div class="page-wrapper">
+  <!-- Desktop Logo -->
+  <div class="logo-desktop">
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+      <rect width="18" height="18" rx="4" fill="#0D3086" />
+      <path
+        d="M5 9l3 3 5-5"
+        stroke="#fff"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+    TASKLY
+  </div>
+
+  <!-- Card -->
+  <div class="card">
+    <!-- Mobile icon -->
+    <div class="mobile-icon">
+      <svg
+        width="28"
+        height="28"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="#0D3086"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="M21 2H3v16h5l3 3 3-3h7V2z" />
+        <path d="M12 8v4" />
+        <path d="M12 16h.01" />
+      </svg>
+    </div>
+    <h2>Forgot password?</h2>
+    <p class="subtitle">No worries, we'll send you reset instructions.</p>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <!-- Email -->
+      <div class="form-group">
+        <label>EMAIL ADDRESS</label>
+        <input
+          type="email"
+          formControlName="email"
+          placeholder="Enter your email"
+          [class.invalid]="isInvalid('email')"
+          aria-label="Email address"
+        />
+        @if (isInvalid('email')) {
+          <span class="error">Invalid email.</span>
+        }
+      </div>
+
+      <!-- Submit -->
+      <button type="submit" class="btn-primary" [disabled]="form.invalid || isLoading()">
+        @if (isLoading()) {
+          <span class="spinner" aria-hidden="true"></span>
+          Sending...
+        } @else {
+          Send Reset Link
+        }
+      </button>
+    </form>
+
+    <!-- Back to login -->
+    <a routerLink="/auth/login" class="back-link">← Back to log in</a>
+
+    <!-- Success State -->
+    @if (sent()) {
+      <div class="divider"></div>
+
+      <div class="success-box">
+        <div class="success-icon">
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#fff"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M20 6L9 17l-5-5" />
+          </svg>
+        </div>
+        <p>If an account exists with this email, we've sent a password reset link.</p>
+      </div>
+
+      <div class="resend-section">
+        <p class="resend-label">DIDN'T RECEIVE THE EMAIL?</p>
+        <button class="resend-btn" (click)="resend()" [disabled]="countdown() > 0">
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="12" cy="12" r="10" />
+            <polyline points="12 6 12 12 16 14" />
+          </svg>
+          @if (countdown() > 0) {
+            Resend in {{ formattedCountdown }}
+          } @else {
+            Resend Link
+          }
+        </button>
+      </div>
+    }
+  </div>
+</div>

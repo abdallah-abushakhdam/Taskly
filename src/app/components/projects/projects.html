@@ -1,0 +1,252 @@
+<div class="projects-page">
+  <!-- ─── Header ───────────────────────────────── -->
+  <div class="page-header">
+    <div class="header-left">
+      <h1>Projects</h1>
+      <p class="header-subtitle">Manage and curate your projects</p>
+    </div>
+    @if (!isLoading() && !hasError() && allProjects().length > 0) {
+      <button class="btn-create" (click)="createProject()">
+        <svg
+          width="14"
+          height="14"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <line x1="12" y1="5" x2="12" y2="19" />
+          <line x1="5" y1="12" x2="19" y2="12" />
+        </svg>
+        Create New Project
+      </button>
+    }
+    @if (isLoading()) {
+      <div class="skeleton-btn"></div>
+    }
+  </div>
+
+  <!-- ─── Loading State ────────────────────────── -->
+  @if (isLoading()) {
+    <div class="projects-grid">
+      @for (item of skeletonItems; track $index) {
+        <div class="skeleton-card">
+          <div class="skeleton-image"></div>
+          <div class="skeleton-line w-70"></div>
+          <div class="skeleton-line w-50"></div>
+        </div>
+      }
+    </div>
+  }
+
+  <!-- ─── Error State ───────────────────────────── -->
+  @if (hasError() && !isLoading()) {
+    <div class="state-container">
+      <div class="error-icon-box">
+        <svg
+          width="28"
+          height="28"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="#E03030"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path
+            d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"
+          />
+          <line x1="12" y1="9" x2="12" y2="13" />
+          <line x1="12" y1="17" x2="12.01" y2="17" />
+        </svg>
+      </div>
+      <h2 class="state-title">Something went wrong</h2>
+      <p class="state-subtitle">
+        We're having trouble retrieving your projects right now. Please try again in a moment.
+      </p>
+      <button class="btn-create" (click)="retry()">Retry Connection</button>
+    </div>
+  }
+
+  <!-- ─── Empty State ───────────────────────────── -->
+  @if (!isLoading() && !hasError() && allProjects().length === 0) {
+    <div class="state-container">
+      <div class="empty-illustration">
+        <div class="empty-icon-main">
+          <svg
+            width="28"
+            height="28"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#0D3086"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+            <polyline points="9 22 9 12 15 12 15 22" />
+          </svg>
+        </div>
+        <div class="empty-icon-top">
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#0D3086"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <polygon
+              points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
+            />
+          </svg>
+        </div>
+        <div class="empty-icon-bottom">
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#0D3086"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path
+              d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"
+            />
+          </svg>
+        </div>
+      </div>
+      <h2 class="state-title">No Projects</h2>
+      <p class="state-subtitle">
+        You don't have any projects yet. Start by defining your first architectural workspace to
+        begin tracking tasks and epics.
+      </p>
+      <button class="btn-create" (click)="createProject()">
+        <svg
+          width="14"
+          height="14"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <circle cx="12" cy="12" r="10" />
+          <line x1="12" y1="8" x2="12" y2="16" />
+          <line x1="8" y1="12" x2="16" y2="12" />
+        </svg>
+        Create New Project
+      </button>
+    </div>
+  }
+
+  <!-- ─── Projects Grid ─────────────────────────── -->
+  @if (!isLoading() && !hasError() && allProjects().length > 0) {
+    <div class="projects-grid">
+      @for (project of paginatedProjects(); track project.id) {
+        <div class="project-card">
+          <h3>{{ project.name }}</h3>
+          <p class="project-desc">{{ project.description }}</p>
+          <div class="project-footer">
+            <span class="created-label">CREATED AT</span>
+            <span class="created-date">{{ project.createdAt }}</span>
+          </div>
+        </div>
+      }
+
+      <div class="project-card add-card" (click)="addProject()">
+        <div class="add-icon">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#041B3C"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" y1="8" x2="12" y2="16" />
+            <line x1="8" y1="12" x2="16" y2="12" />
+          </svg>
+        </div>
+        <span class="add-label">ADD PROJECT</span>
+      </div>
+    </div>
+
+    <!-- ─── Footer ─────────────────────────────── -->
+    <div class="page-footer">
+      <span class="showing-text">
+        Showing {{ paginatedProjects().length }} of {{ totalProjects() }} active projects
+      </span>
+      <div class="pagination">
+        <button
+          class="page-btn nav-btn"
+          (click)="goToPage(currentPage() - 1)"
+          [disabled]="currentPage() === 1"
+        >
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <polyline points="15 18 9 12 15 6" />
+          </svg>
+        </button>
+        @for (page of pages(); track page) {
+          <button class="page-btn" [class.active]="page === currentPage()" (click)="goToPage(page)">
+            {{ page }}
+          </button>
+        }
+        <button
+          class="page-btn nav-btn"
+          (click)="goToPage(currentPage() + 1)"
+          [disabled]="currentPage() === totalPages()"
+        >
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <polyline points="9 18 15 12 9 6" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  }
+
+  <!-- Mobile FAB -->
+  <button class="fab-btn" (click)="createProject()">
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="#fff"
+      stroke-width="2.5"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <line x1="12" y1="5" x2="12" y2="19" />
+      <line x1="5" y1="12" x2="19" y2="12" />
+    </svg>
+  </button>
+</div>

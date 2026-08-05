@@ -1,0 +1,683 @@
+<div class="tasks-page">
+  <!-- Breadcrumb -->
+  <div class="breadcrumb">
+    <a routerLink="/project" class="breadcrumb-link">PROJECTS</a>
+    <span class="breadcrumb-sep">›</span>
+    <span class="breadcrumb-link">PROJECT ALPHA</span>
+    <span class="breadcrumb-sep">›</span>
+    <span class="breadcrumb-current">TASKS</span>
+  </div>
+
+  <!-- Header -->
+  <div class="page-header">
+    <div class="header-left">
+      <h1 class="page-title">Active Workboard</h1>
+      <p class="page-subtitle">Curating Project Alpha's production pipeline and milestones.</p>
+    </div>
+    <div class="header-right">
+      <div class="search-wrap">
+        <svg
+          width="14"
+          height="14"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="#B0C2E8"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <circle cx="11" cy="11" r="8" />
+          <line x1="21" y1="21" x2="16.65" y2="16.65" />
+        </svg>
+        <input
+          type="text"
+          placeholder="Search tasks..."
+          [value]="searchQuery()"
+          (input)="onSearch($event)"
+        />
+      </div>
+
+      <div class="view-dropdown" (click)="toggleViewMenu()" [class.open]="viewMenuOpen()">
+        <div class="view-selected">
+          @if (view() === 'board') {
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <rect x="3" y="3" width="7" height="7" />
+              <rect x="14" y="3" width="7" height="7" />
+              <rect x="14" y="14" width="7" height="7" />
+              <rect x="3" y="14" width="7" height="7" />
+            </svg>
+            Board View
+          } @else {
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <line x1="8" y1="6" x2="21" y2="6" />
+              <line x1="8" y1="12" x2="21" y2="12" />
+              <line x1="8" y1="18" x2="21" y2="18" />
+              <line x1="3" y1="6" x2="3.01" y2="6" />
+              <line x1="3" y1="12" x2="3.01" y2="12" />
+              <line x1="3" y1="18" x2="3.01" y2="18" />
+            </svg>
+            List View
+          }
+          <svg
+            width="12"
+            height="12"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <polyline points="6 9 12 15 18 9" />
+          </svg>
+        </div>
+
+        @if (viewMenuOpen()) {
+          <div class="view-menu">
+            <button
+              class="view-option"
+              [class.active]="view() === 'board'"
+              (click)="setView('board')"
+            >
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <rect x="3" y="3" width="7" height="7" />
+                <rect x="14" y="3" width="7" height="7" />
+                <rect x="14" y="14" width="7" height="7" />
+                <rect x="3" y="14" width="7" height="7" />
+              </svg>
+              Board View
+            </button>
+            <button
+              class="view-option"
+              [class.active]="view() === 'list'"
+              (click)="setView('list')"
+            >
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <line x1="8" y1="6" x2="21" y2="6" />
+                <line x1="8" y1="12" x2="21" y2="12" />
+                <line x1="8" y1="18" x2="21" y2="18" />
+                <line x1="3" y1="6" x2="3.01" y2="6" />
+                <line x1="3" y1="12" x2="3.01" y2="12" />
+                <line x1="3" y1="18" x2="3.01" y2="18" />
+              </svg>
+              List View
+            </button>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── Board View (desktop only) ───────────── -->
+  @if (view() === 'board') {
+    <div class="board">
+      <!-- TO DO -->
+      <div class="column">
+        <div class="column-header">
+          <div class="column-title">
+            <span class="col-dot todo"></span>
+            <span class="col-name">TO DO</span>
+            <span class="col-count">{{ todoTasks().length }}</span>
+          </div>
+          <button class="col-add-btn" (click)="addTask('todo')">
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <line x1="12" y1="5" x2="12" y2="19" />
+              <line x1="5" y1="12" x2="19" y2="12" />
+            </svg>
+          </button>
+        </div>
+        <button class="add-task-row" (click)="addTask('todo')">
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#B0C2E8"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" y1="8" x2="12" y2="16" />
+            <line x1="8" y1="12" x2="16" y2="12" />
+          </svg>
+          ADD NEW TASK
+        </button>
+        <div class="task-list">
+          @for (task of todoTasks(); track task.id) {
+            <div class="task-card" (click)="openTask(task)">
+              <p class="task-title">{{ task.title }}</p>
+              <div class="task-footer">
+                <div class="task-date">
+                  <svg
+                    width="11"
+                    height="11"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#B0C2E8"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                    <line x1="16" y1="2" x2="16" y2="6" />
+                    <line x1="8" y1="2" x2="8" y2="6" />
+                    <line x1="3" y1="10" x2="21" y2="10" />
+                  </svg>
+                  <span>{{ task.date }}</span>
+                </div>
+                <div class="task-avatar" [style.background]="task.assigneeColor">
+                  {{ task.assigneeInitials }}
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- IN PROGRESS -->
+      <div class="column">
+        <div class="column-header">
+          <div class="column-title">
+            <span class="col-dot in-progress"></span>
+            <span class="col-name">IN PROGRESS</span>
+            <span class="col-count">{{ inProgressTasks().length }}</span>
+          </div>
+          <button class="col-add-btn" (click)="addTask('in-progress')">
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <line x1="12" y1="5" x2="12" y2="19" />
+              <line x1="5" y1="12" x2="19" y2="12" />
+            </svg>
+          </button>
+        </div>
+        <button class="add-task-row" (click)="addTask('in-progress')">
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#B0C2E8"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" y1="8" x2="12" y2="16" />
+            <line x1="8" y1="12" x2="16" y2="12" />
+          </svg>
+          ADD NEW TASK
+        </button>
+        <div class="task-list">
+          @for (task of inProgressTasks(); track task.id) {
+            <div class="task-card" (click)="openTask(task)">
+              <p class="task-title">{{ task.title }}</p>
+              <div class="task-footer">
+                @if (task.badge) {
+                  <span class="task-badge" [class]="task.badge.type">{{ task.badge.label }}</span>
+                } @else {
+                  <div class="task-date">
+                    <svg
+                      width="11"
+                      height="11"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="#B0C2E8"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                      <line x1="16" y1="2" x2="16" y2="6" />
+                      <line x1="8" y1="2" x2="8" y2="6" />
+                      <line x1="3" y1="10" x2="21" y2="10" />
+                    </svg>
+                    <span>{{ task.date }}</span>
+                  </div>
+                }
+                <div class="task-avatar" [style.background]="task.assigneeColor">
+                  {{ task.assigneeInitials }}
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- BLOCKED -->
+      <div class="column">
+        <div class="column-header">
+          <div class="column-title">
+            <span class="col-dot blocked"></span>
+            <span class="col-name">BLOCKED</span>
+            <span class="col-count">{{ blockedTasks().length }}</span>
+          </div>
+          <button class="col-add-btn" (click)="addTask('blocked')">
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <line x1="12" y1="5" x2="12" y2="19" />
+              <line x1="5" y1="12" x2="19" y2="12" />
+            </svg>
+          </button>
+        </div>
+        <button class="add-task-row" (click)="addTask('blocked')">
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#B0C2E8"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" y1="8" x2="12" y2="16" />
+            <line x1="8" y1="12" x2="16" y2="12" />
+          </svg>
+          ADD NEW TASK
+        </button>
+        <div class="task-list">
+          @for (task of blockedTasks(); track task.id) {
+            <div class="task-card" (click)="openTask(task)">
+              <p class="task-title">{{ task.title }}</p>
+              <div class="task-footer">
+                @if (task.badge) {
+                  <span class="task-badge" [class]="task.badge.type">{{ task.badge.label }}</span>
+                } @else {
+                  <div class="task-date">
+                    <svg
+                      width="11"
+                      height="11"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="#B0C2E8"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                      <line x1="16" y1="2" x2="16" y2="6" />
+                      <line x1="8" y1="2" x2="8" y2="6" />
+                      <line x1="3" y1="10" x2="21" y2="10" />
+                    </svg>
+                    <span>{{ task.date }}</span>
+                  </div>
+                }
+                <div class="task-avatar" [style.background]="task.assigneeColor">
+                  {{ task.assigneeInitials }}
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- ─── List View (desktop only) ────────────── -->
+  @if (view() === 'list') {
+    <div class="list-card">
+      <div class="list-header">
+        <span class="list-col task-id-col">TASK ID</span>
+        <span class="list-col title-col">TITLE</span>
+        <span class="list-col status-col">STATUS</span>
+        <span class="list-col date-col">DUE DATE</span>
+        <span class="list-col assignee-col">ASSIGNEE</span>
+        <span class="list-col action-col"></span>
+      </div>
+      @for (task of filteredTasks(); track task.id) {
+        <div class="list-row" (click)="openTask(task)">
+          <span class="list-col task-id-col task-id">{{ task.taskId }}</span>
+          <span class="list-col title-col list-title">{{ task.title }}</span>
+          <span class="list-col status-col">
+            <span class="status-badge" [class]="task.status">
+              {{ task.status === 'in-progress' ? 'IN PROGRESS' : task.status.toUpperCase() }}
+            </span>
+          </span>
+          <span class="list-col date-col list-date">{{ task.date }}</span>
+          <span class="list-col assignee-col">
+            <div class="list-assignee">
+              <div class="task-avatar" [style.background]="task.assigneeColor">
+                {{ task.assigneeInitials }}
+              </div>
+              <span class="assignee-name">{{ task.assigneeName }}</span>
+            </div>
+          </span>
+          <span class="list-col action-col">
+            <button class="list-menu-btn">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#4F5B76"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <circle cx="5" cy="12" r="1" />
+                <circle cx="12" cy="12" r="1" />
+                <circle cx="19" cy="12" r="1" />
+              </svg>
+            </button>
+          </span>
+        </div>
+      }
+      <div class="list-footer">
+        <span class="showing-text">Showing {{ tasks().length }} of 26 tasks</span>
+        <div class="list-pagination">
+          <button class="page-nav">‹</button>
+          <span class="page-info">Page 1 of 5</span>
+          <button class="page-nav">›</button>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- Mobile Task List (always shown on mobile) -->
+  <div class="mobile-task-list">
+    <button class="btn-create-mobile" (click)="addTask()">
+      <svg
+        width="14"
+        height="14"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <line x1="12" y1="5" x2="12" y2="19" />
+        <line x1="5" y1="12" x2="19" y2="12" />
+      </svg>
+      Create Task
+    </button>
+
+    @for (task of filteredTasks(); track task.id) {
+      <div class="mobile-task-card">
+        <div class="mobile-task-top">
+          <span class="mobile-task-id">{{ task.taskId }}</span>
+          <span class="status-badge" [class]="task.status">
+            {{ task.status === 'in-progress' ? 'IN PROGRESS' : task.status.toUpperCase() }}
+          </span>
+        </div>
+        <p class="mobile-task-title">{{ task.title }}</p>
+        <div class="mobile-task-bottom">
+          <div class="task-avatar" [style.background]="task.assigneeColor">
+            {{ task.assigneeInitials }}
+          </div>
+          <div class="mobile-task-date">
+            <span class="mobile-date-label">DUE DATE</span>
+            <span class="mobile-date-value">{{ task.date }}</span>
+          </div>
+          <button class="mobile-menu-btn">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#4F5B76"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="12" cy="5" r="1" />
+              <circle cx="12" cy="12" r="1" />
+              <circle cx="12" cy="19" r="1" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    }
+  </div>
+  @if (selectedTask()) {
+    <div class="modal-overlay" (click)="closeTask()">
+      <div class="modal-card" (click)="$event.stopPropagation()">
+        <!-- Left Side -->
+        <div class="modal-left-side">
+          <!-- Part 1: Header -->
+          <div class="modal-header">
+            <div class="modal-header-top">
+              <div class="modal-header-left">
+                <span class="task-code-badge">{{ selectedTask()!.taskId }}</span>
+                <div class="epic-select">
+                  <svg
+                    width="12"
+                    height="12"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#0D3086"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+                  </svg>
+                  EPIC-102 (Core UI Overhaul)
+                  <svg
+                    width="12"
+                    height="12"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#4F5B76"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <polyline points="6 9 12 15 18 9" />
+                  </svg>
+                </div>
+              </div>
+              <button class="modal-close" (click)="closeTask()">
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <line x1="18" y1="6" x2="6" y2="18" />
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+              </button>
+            </div>
+            <h2 class="modal-title">{{ selectedTask()!.title }}</h2>
+          </div>
+
+          <!-- Part 2: Description -->
+          <div class="modal-description-section">
+            <p class="modal-section-label">DESCRIPTION</p>
+            <div class="modal-description">
+              <p>
+                Detailed task description goes here. This involves updating the modal container
+                background to use semi-transparent surface colors with a 20px backdrop-blur to align
+                with the Digital Curator aesthetic. Ensure contrast ratios remain accessible.
+              </p>
+            </div>
+          </div>
+
+          <!-- Part 3: Footer -->
+          <div class="modal-footer">
+            <button class="btn-copy">
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+                <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+              </svg>
+              Copy link
+            </button>
+            <button class="btn-close-modal" (click)="closeTask()">Close</button>
+          </div>
+        </div>
+
+        <!-- Right Side -->
+        <div class="modal-right">
+          <div class="detail-item">
+            <p class="modal-section-label">STATUS</p>
+            <div class="detail-select" [class]="selectedTask()!.status">
+              {{
+                selectedTask()!.status === 'in-progress'
+                  ? 'IN PROGRESS'
+                  : selectedTask()!.status.toUpperCase()
+              }}
+              <svg
+                width="12"
+                height="12"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <polyline points="6 9 12 15 18 9" />
+              </svg>
+            </div>
+          </div>
+
+          <div class="detail-item">
+            <p class="modal-section-label">ASSIGNEE</p>
+            <div class="detail-select">
+              <div class="detail-avatar" [style.background]="selectedTask()!.assigneeColor">
+                {{ selectedTask()!.assigneeInitials }}
+              </div>
+              <span>{{ selectedTask()!.assigneeName }}</span>
+              <svg
+                width="12"
+                height="12"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#4F5B76"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <polyline points="6 9 12 15 18 9" />
+              </svg>
+            </div>
+          </div>
+
+          <div class="detail-item">
+            <p class="modal-section-label">REPORTER</p>
+            <div class="detail-user">
+              <div class="detail-avatar" style="background: #65dca4">AS</div>
+              <span>Alex Sterling</span>
+            </div>
+          </div>
+
+          <div class="detail-item">
+            <p class="modal-section-label">DUE DATE</p>
+            <div class="detail-select">
+              <svg
+                width="12"
+                height="12"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#4F5B76"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                <line x1="16" y1="2" x2="16" y2="6" />
+                <line x1="8" y1="2" x2="8" y2="6" />
+                <line x1="3" y1="10" x2="21" y2="10" />
+              </svg>
+              <span>{{ selectedTask()!.date }}</span>
+              <svg
+                width="12"
+                height="12"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#4F5B76"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <polyline points="6 9 12 15 18 9" />
+              </svg>
+            </div>
+          </div>
+
+          <div class="detail-item">
+            <p class="modal-section-label">CREATED AT</p>
+            <span class="detail-value">10 Oct 2025</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+</div>
