@@ -1,7 +1,8 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AuthService } from '../../services/auth';
+import { ApiService } from '../../services/api.service';
 import { RouterLink } from '@angular/router';
+import { LoadingService } from '../../services/loading.service';
 @Component({
   selector: 'app-sign-in',
   imports: [ReactiveFormsModule, RouterLink],
@@ -9,11 +10,12 @@ import { RouterLink } from '@angular/router';
   styleUrl: './sign-in.css',
 })
 export class SignIn {
-  private auth = inject(AuthService);
+  private api = inject(ApiService);
   private fb = inject(FormBuilder);
 
   showPassword = false;
-  errorMessage = '';
+  isLoading = signal(false);
+  errorMessage = signal('');
 
   form: FormGroup = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
@@ -26,15 +28,20 @@ export class SignIn {
     return !!(control?.invalid && control?.touched);
   }
 
-  onSubmit(): void {
+  async onSubmit(): Promise<void> {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
     }
-    const { email, password } = this.form.value;
-    const success = this.auth.login(email, password);
-    if (!success) {
-      this.errorMessage = 'Invalid email or password.';
+    this.isLoading.set(true);
+    this.errorMessage.set('');
+    try {
+      const { email, password } = this.form.value;
+      await this.api.login(email, password);
+    } catch (err: any) {
+      this.errorMessage.set(err.error?.message || 'Invalid email or password.');
+    } finally {
+      this.isLoading.set(false);
     }
   }
 }

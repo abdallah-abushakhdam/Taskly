@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { AuthService } from '../../services/auth';
+import { ApiService } from '../../services/api.service';
 import { inject, signal } from '@angular/core';
 import { AbstractControl, ValidationErrors } from '@angular/forms';
 import { RouterLink } from '@angular/router';
@@ -20,7 +20,7 @@ function passwordMatchValidator(control: AbstractControl): ValidationErrors | nu
   styleUrl: './new-pass.css',
 })
 export class NewPass {
-  private auth = inject(AuthService);
+  private api = inject(ApiService);
   private fb = inject(FormBuilder);
 
   showPassword = false;
@@ -69,7 +69,7 @@ export class NewPass {
     this.isLoading.set(true);
     this.errorMessage.set('');
     try {
-      await this.auth.resetPassword(this.form.value.password);
+      await this.api.resetPassword(this.form.value.password);
       this.successMessage.set('Password updated successfully!');
     } catch (err: any) {
       this.errorMessage.set(err.message || 'Something went wrong. Please try again.');

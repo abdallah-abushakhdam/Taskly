@@ -83,8 +83,8 @@
       </div>
 
       <!-- Error -->
-      @if (errorMessage) {
-        <span class="error text-center">{{ errorMessage }}</span>
+      @if (errorMessage()) {
+        <span class="error text-center">{{ errorMessage() }}</span>
       }
 
       <!-- Submit -->

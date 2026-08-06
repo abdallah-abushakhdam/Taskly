@@ -37,7 +37,7 @@ export class Layout {
     this.mobileMenuOpen.set(false);
   }
 
-  logout(): void {
+  async logout(): Promise<void> {
     this.api.logout();
   }
 }
