@@ -26,7 +26,7 @@ function passwordMatchValidator(control: AbstractControl): ValidationErrors | nu
   styleUrl: './sign-up.css',
 })
 export class SignUp {
-  private auth = inject(ApiService);
+  private api = inject(ApiService);
   private fb = inject(FormBuilder);
 
   showPassword = false;
@@ -75,12 +75,20 @@ export class SignUp {
     return /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(this.passwordValue);
   }
 
-  onSubmit(): void {
+  async onSubmit(): Promise<void> {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
     }
-    const { name, email, jobTitle, password } = this.form.value;
-    this.auth.register({ name, email, jobTitle, password });
+    this.isLoading.set(true);
+    this.errorMessage.set('');
+    try {
+      const { name, email, jobTitle, password } = this.form.value;
+      await this.api.register({ name, email, jobTitle, password });
+    } catch (err: any) {
+      this.errorMessage.set(err.error?.message || 'Something went wrong.');
+    } finally {
+      this.isLoading.set(false);
+    }
   }
 }

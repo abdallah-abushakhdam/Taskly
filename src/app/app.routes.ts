@@ -12,14 +12,14 @@ export const routes: Routes = [
     path: 'auth/register',
     loadComponent: () => import('./components/sign-up/sign-up').then((m) => m.SignUp),
   },
-  {
-    path: 'auth/forgot-password',
-    loadComponent: () => import('./components/forgot-pass/forgot-pass').then((m) => m.ForgotPass),
-  },
-  {
-    path: 'auth/reset-password',
-    loadComponent: () => import('./components/new-pass/new-pass').then((m) => m.NewPass),
-  },
+  // {
+  //   path: 'auth/forgot-password',
+  //   loadComponent: () => import('./components/forgot-pass/forgot-pass').then((m) => m.ForgotPass),
+  // },
+  // {
+  //   path: 'auth/reset-password',
+  //   loadComponent: () => import('./components/new-pass/new-pass').then((m) => m.NewPass),
+  // },
 
   {
     path: '',

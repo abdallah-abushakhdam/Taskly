@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators, FormGroup } from '@angular/forms';
+import { ApiService } from '../../services/api.service';
 @Component({
   selector: 'app-new-project',
   imports: [ReactiveFormsModule, RouterLink],
@@ -10,6 +11,7 @@ import { FormBuilder, ReactiveFormsModule, Validators, FormGroup } from '@angula
 export class NewProject {
   private router = inject(Router);
   private fb = inject(FormBuilder);
+  private api = inject(ApiService);
 
   form: FormGroup = this.fb.group({
     title: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],

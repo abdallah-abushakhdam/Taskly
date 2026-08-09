@@ -1,50 +1,51 @@
 import { Component, signal, computed, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-
+import { ApiService } from '../../services/api.service';
+import { LoadingService } from '../../services/loading.service';
 interface Project {
   id: string;
   name: string;
   description: string;
-  createdAt: string;
+  created_at: string;
 }
 
-const MOCK_PROJECTS: Project[] = [
-  {
-    id: '1',
-    name: 'Skyline Residence Phase II',
-    description:
-      'Structural review and aesthetic curation for the high-rise residential complex in the downtown district.',
-    createdAt: '12 Oct 2025',
-  },
-  {
-    id: '2',
-    name: 'Skyline Residence Phase II',
-    description:
-      'Structural review and aesthetic curation for the high-rise residential complex in the downtown district.',
-    createdAt: '12 Oct 2025',
-  },
-  {
-    id: '3',
-    name: 'Skyline Residence Phase II',
-    description:
-      'Structural review and aesthetic curation for the high-rise residential complex in the downtown district.',
-    createdAt: '12 Oct 2025',
-  },
-  {
-    id: '4',
-    name: 'Skyline Residence Phase II',
-    description:
-      'Structural review and aesthetic curation for the high-rise residential complex in the downtown district.',
-    createdAt: '12 Oct 2025',
-  },
-  {
-    id: '5',
-    name: 'Skyline Residence Phase II',
-    description:
-      'Structural review and aesthetic curation for the high-rise residential complex in the downtown district.',
-    createdAt: '12 Oct 2025',
-  },
-];
+// const MOCK_PROJECTS: Project[] = [
+//   {
+//     id: '1',
+//     name: 'Skyline Residence Phase II',
+//     description:
+//       'Structural review and aesthetic curation for the high-rise residential complex in the downtown district.',
+//     created_at: '12 Oct 2025',
+//   },
+//   {
+//     id: '2',
+//     name: 'Skyline Residence Phase II',
+//     description:
+//       'Structural review and aesthetic curation for the high-rise residential complex in the downtown district.',
+//     created_at: '12 Oct 2025',
+//   },
+//   {
+//     id: '3',
+//     name: 'Skyline Residence Phase II',
+//     description:
+//       'Structural review and aesthetic curation for the high-rise residential complex in the downtown district.',
+//     created_at: '12 Oct 2025',
+//   },
+//   {
+//     id: '4',
+//     name: 'Skyline Residence Phase II',
+//     description:
+//       'Structural review and aesthetic curation for the high-rise residential complex in the downtown district.',
+//     created_at: '12 Oct 2025',
+//   },
+//   {
+//     id: '5',
+//     name: 'Skyline Residence Phase II',
+//     description:
+//       'Structural review and aesthetic curation for the high-rise residential complex in the downtown district.',
+//     created_at: '12 Oct 2025',
+//   },
+// ];
 
 @Component({
   selector: 'app-projects',
@@ -54,11 +55,13 @@ const MOCK_PROJECTS: Project[] = [
 })
 export class Projects implements OnInit {
   private router = inject(Router);
+  private api = inject(ApiService);
+  private loading = inject(LoadingService);
 
   // Dummy data for projects
   allProjects = signal<Project[]>([]);
 
-  isLoading = signal(true);
+  isLoading = this.loading.isLoading;
   hasError = signal(false);
   currentPage = signal(1);
   itemsPerPage = signal(5);
@@ -79,23 +82,34 @@ export class Projects implements OnInit {
 
   ngOnInit() {
     this.loadProjects();
-
-    setTimeout(() => {
-      try {
-        this.allProjects.set(MOCK_PROJECTS);
-        this.isLoading.set(false);
-      } catch {
-        this.hasError.set(true);
-        this.isLoading.set(false);
-      }
-    }, 1500);
   }
 
-  loadProjects() {
-    this.isLoading.set(true);
+  async loadProjects(): Promise<void> {
     this.hasError.set(false);
+    try {
+      const data = await this.api.getProjects();
+      this.allProjects.set(
+        data.map((p: any) => ({
+          id: p.id,
+          name: p.name,
+          description: p.description || '',
+          created_at: p.created_at,
+        })),
+      );
+    } catch {
+      this.hasError.set(true);
+    }
   }
 
+  formatDate(dateStr: string): string {
+    if (!dateStr) return '';
+    const date = new Date(dateStr);
+    return date.toLocaleDateString('en-GB', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric',
+    });
+  }
   retry(): void {
     this.loadProjects();
   }
@@ -104,6 +118,11 @@ export class Projects implements OnInit {
     if (page >= 1 && page <= this.totalPages()) {
       this.currentPage.set(page);
     }
+  }
+
+  openProject(project: Project): void {
+    localStorage.setItem('selected_project_id', JSON.stringify(project));
+    this.router.navigate(['/project', project.id, 'members']);
   }
 
   addProject(): void {
