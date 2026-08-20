@@ -2,7 +2,7 @@ import { Component, signal, computed, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ApiService } from '../../services/api.service';
 import { LoadingService } from '../../services/loading.service';
-interface Project {
+export interface Project {
   id: string;
   name: string;
   description: string;
@@ -121,8 +121,9 @@ export class Projects implements OnInit {
   }
 
   openProject(project: Project): void {
-    localStorage.setItem('selected_project_id', JSON.stringify(project));
-    this.router.navigate(['/project', project.id, 'members']);
+    console.log('Storing project:', project);
+    localStorage.setItem('selected_project', JSON.stringify(project));
+    this.router.navigate(['/project', project.id, 'epics']);
   }
 
   addProject(): void {

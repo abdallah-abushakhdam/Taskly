@@ -25,6 +25,9 @@ export class Layout {
       .slice(0, 2);
   }
 
+  hasSelectedProject(): boolean {
+    return !!localStorage.getItem('selected_project');
+  }
   toggle(): void {
     this.collapsed.update((v) => !v);
   }

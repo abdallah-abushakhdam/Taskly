@@ -11,7 +11,7 @@ import { Projects } from './components/projects/projects';
   // imports: [RouterOutlet, SignUp, SignIn, ForgotPass, NewPass, Layout, Projects],
   templateUrl: './app.html',
   styleUrl: './app.css',
-  imports: [SignUp, RouterOutlet],
+  imports: [RouterOutlet],
 })
 export class App {
   protected readonly title = signal('Taskly');

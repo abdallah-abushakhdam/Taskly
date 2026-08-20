@@ -3,7 +3,7 @@
   <div class="breadcrumb">
     <a routerLink="/project" class="breadcrumb-link">PROJECTS</a>
     <span class="breadcrumb-sep">›</span>
-    <span class="breadcrumb-link">PROJECT NAME</span>
+    <span class="breadcrumb-link">{{ selectedProject()?.name || 'Project' }}</span>
     <span class="breadcrumb-sep">›</span>
     <span class="breadcrumb-current">MEMBERS</span>
   </div>
@@ -190,7 +190,9 @@
         <!-- Actions -->
         <div class="modal-actions">
           <button class="btn-cancel" (click)="closeModal()">Cancel</button>
-          <button class="btn-send" (click)="sendInvite()">Send Invitation</button>
+          <button class="btn-send" (click)="sendInvitation()" [disabled]="!inviteEmail()">
+            Send Invitation
+          </button>
         </div>
       </div>
     </div>

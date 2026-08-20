@@ -151,7 +151,7 @@
   @if (!isLoading() && !hasError() && allProjects().length > 0) {
     <div class="projects-grid">
       @for (project of paginatedProjects(); track project.id) {
-        <div class="project-card">
+        <div class="project-card" (click)="openProject(project)">
           <h3>{{ project.name }}</h3>
           <p class="project-desc">{{ project.description }}</p>
           <div class="project-footer">

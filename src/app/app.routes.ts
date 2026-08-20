@@ -12,14 +12,18 @@ export const routes: Routes = [
     path: 'auth/register',
     loadComponent: () => import('./components/sign-up/sign-up').then((m) => m.SignUp),
   },
-  // {
-  //   path: 'auth/forgot-password',
-  //   loadComponent: () => import('./components/forgot-pass/forgot-pass').then((m) => m.ForgotPass),
-  // },
-  // {
-  //   path: 'auth/reset-password',
-  //   loadComponent: () => import('./components/new-pass/new-pass').then((m) => m.NewPass),
-  // },
+  {
+    path: 'auth/forgot-password',
+    loadComponent: () => import('./components/forgot-pass/forgot-pass').then((m) => m.ForgotPass),
+  },
+  {
+    path: 'auth/reset-password',
+    loadComponent: () => import('./components/new-pass/new-pass').then((m) => m.NewPass),
+  },
+  {
+    path: 'accept-invitation',
+    loadComponent: () => import('./components/accept-inv/accept-inv').then((m) => m.AcceptInv),
+  },
 
   {
     path: '',
@@ -37,13 +41,19 @@ export const routes: Routes = [
           import('./components/new-project/new-project').then((m) => m.NewProject),
       },
       {
+        path: 'project/:projectId/epics/new',
+        loadComponent: () => import('./components/new-epic/new-epic').then((m) => m.NewEpic),
+      },
+      {
+        path: 'project/:projectId/epics',
+        loadComponent: () => import('./components/epics/epics').then((m) => m.Epics),
+      },
+
+      {
         path: 'epics',
         loadComponent: () => import('./components/epics/epics').then((m) => m.Epics),
       },
-      {
-        path: 'epics/new',
-        loadComponent: () => import('./components/new-epic/new-epic').then((m) => m.NewEpic),
-      },
+
       {
         path: 'tasks',
         loadComponent: () => import('./components/tasks/tasks').then((m) => m.Tasks),

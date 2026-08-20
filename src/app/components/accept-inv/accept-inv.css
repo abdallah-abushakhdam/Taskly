@@ -1,0 +1,96 @@
+.page-wrapper {
+  min-height: 100vh;
+  background: #f0f4fc;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: #0d3086;
+  letter-spacing: 0.03rem;
+  margin-bottom: 2rem;
+  font-family: Inter, sans-serif;
+}
+
+.card {
+  background: #ffffff;
+  border-radius: 1rem;
+  box-shadow: 0 0.25rem 1.5rem rgba(13, 48, 134, 0.08);
+  padding: 2.5rem;
+  width: 100%;
+  max-width: 24rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  text-align: center;
+}
+
+.badge {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: #0d3086;
+  letter-spacing: 0.05rem;
+  text-transform: uppercase;
+  font-family: Inter, sans-serif;
+}
+
+.title {
+  font-family: Inter, sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #141b2c;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.subtitle {
+  font-family: Inter, sans-serif;
+  font-size: 0.875rem;
+  color: #4f5b76;
+  margin: 0;
+}
+
+.error-text {
+  font-family: Inter, sans-serif;
+  font-size: 0.875rem;
+  color: #e03030;
+  margin: 0;
+}
+
+.btn-primary {
+  width: 100%;
+  padding: 0.875rem;
+  background: linear-gradient(95.71deg, #003d9b 0%, #0052cc 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: 0.375rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: Inter, sans-serif;
+  transition: opacity 0.2s;
+  text-decoration: none;
+  display: block;
+  text-align: center;
+}
+
+.btn-primary:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

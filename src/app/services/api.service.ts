@@ -12,7 +12,7 @@ export class ApiService {
   private readonly USER_KEY = 'taskly_user';
 
   currentUser = signal<any>(this.loadUser());
-
+  projectId = signal('');
   constructor(
     private http: HttpClient,
     private router: Router,
@@ -65,6 +65,11 @@ export class ApiService {
         password,
       }),
     );
+
+    localStorage.removeItem('selected_project');
+
+    console.log('Full login response:', res);
+    console.log('access_token:', res.access_token);
 
     localStorage.setItem(this.TOKEN_KEY, res.access_token);
     localStorage.setItem(this.REFRESH_KEY, res.refresh_token);
@@ -175,6 +180,15 @@ export class ApiService {
     projectId: string;
     deadline?: string;
   }): Promise<any> {
+    const body = {
+      title: data.title,
+      description: data.description,
+      assignee_id: data.assigneeId || this.getUserId(),
+      project_id: data.projectId,
+      deadline: data.deadline,
+    };
+
+    console.log('Epic body:', body);
     return firstValueFrom(
       this.http.post<any>(`${BASE_URL}/rest/v1/epics`, {
         title: data.title,
@@ -182,6 +196,71 @@ export class ApiService {
         assignee_id: data.assigneeId || this.getUserId(),
         project_id: data.projectId,
         deadline: data.deadline,
+      }),
+    );
+  }
+
+  async getProjectTasks(projectId: string): Promise<any[]> {
+    const res = await firstValueFrom(
+      this.http.get<any[]>(`${BASE_URL}/rest/v1/project_tasks?project_id=eq.${projectId}`),
+    );
+    return res || [];
+  }
+
+  async createTask(data: {
+    title: string;
+    description?: string;
+    status: string;
+    assigneeId?: string;
+    epicId?: string;
+    projectId: string;
+    dueDate?: string;
+  }): Promise<any> {
+    return firstValueFrom(
+      this.http.post<any>(`${BASE_URL}/rest/v1/tasks`, {
+        title: data.title,
+        description: data.description,
+        status: data.status,
+        assignee_id: data.assigneeId,
+        epic_id: data.epicId,
+        project_id: data.projectId,
+        due_date: data.dueDate,
+      }),
+    );
+  }
+
+  async updateTaskStatus(taskId: string, status: string): Promise<any> {
+    return firstValueFrom(
+      this.http.patch<any>(`${BASE_URL}/rest/v1/tasks?id=eq.${taskId}`, { status }),
+    );
+  }
+
+  async deleteTask(taskId: string): Promise<any> {
+    return firstValueFrom(this.http.delete<any>(`${BASE_URL}/rest/v1/tasks?id=eq.${taskId}`));
+  }
+
+  async getProjectMembers(projectId: string): Promise<any[]> {
+    const res = await firstValueFrom(
+      this.http.get<any[]>(`${BASE_URL}/rest/v1/get_project_members?project_id=eq.${projectId}`),
+    );
+    return res || [];
+  }
+
+  async inviteMember(email: string, projectId: string): Promise<any> {
+    return firstValueFrom(
+      this.http.post<any>(`${BASE_URL}/rest/v1/rpc/invite_member`, {
+        p_email: email,
+        p_project_id: projectId,
+        p_app_url: 'http://localhost:4200/accept-invitation',
+        p_base_url: BASE_URL,
+      }),
+    );
+  }
+
+  async acceptInvitation(token: string): Promise<any> {
+    return firstValueFrom(
+      this.http.post<any>(`${BASE_URL}/rest/v1/rpc/accept_invitation`, {
+        p_token: token,
       }),
     );
   }

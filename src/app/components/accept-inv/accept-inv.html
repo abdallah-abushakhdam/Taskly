@@ -1,0 +1,56 @@
+<div class="page-wrapper">
+  <!-- Logo -->
+  <div class="logo">
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+      <rect width="18" height="18" rx="4" fill="#0D3086" />
+      <path
+        d="M5 9l3 3 5-5"
+        stroke="#fff"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+    TASKLY
+  </div>
+
+  <!-- Card -->
+  <div class="card">
+    <div class="badge">
+      <svg
+        width="12"
+        height="12"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+        <circle cx="9" cy="7" r="4" />
+        <line x1="19" y1="8" x2="19" y2="14" />
+        <line x1="22" y1="11" x2="16" y2="11" />
+      </svg>
+      NEW PROJECT INVITATION
+    </div>
+
+    @if (errorMessage()) {
+      <h2 class="title">Invalid Invitation</h2>
+      <p class="error-text">{{ errorMessage() }}</p>
+      <a routerLink="/auth/login" class="btn-primary">Go to Login</a>
+    } @else if (successMessage()) {
+      <h2 class="title">{{ successMessage() }}</h2>
+      <p class="subtitle">Redirecting to your projects...</p>
+    } @else {
+      <h2 class="title">You've been invited to join new project</h2>
+      <button class="btn-primary" (click)="acceptInvitation()" [disabled]="isLoading()">
+        @if (isLoading()) {
+          Accepting...
+        } @else {
+          Accept Invitation
+        }
+      </button>
+    }
+  </div>
+</div>

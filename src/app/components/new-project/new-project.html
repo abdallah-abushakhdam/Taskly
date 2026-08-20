@@ -94,7 +94,16 @@
       <!-- Actions -->
       <div class="form-actions">
         <button type="button" class="btn-back" (click)="back()">Back</button>
-        <button type="submit" class="btn-submit" [disabled]="form.invalid">Create Project</button>
+        @if (errorMessage()) {
+          <div class="error-banner" role="alert">{{ errorMessage() }}</div>
+        }
+        <button type="submit" class="btn-submit" [disabled]="form.invalid || isLoading()">
+          @if (isLoading()) {
+            Creating...
+          } @else {
+            Create Project
+          }
+        </button>
       </div>
     </form>
   </div>

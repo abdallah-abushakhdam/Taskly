@@ -380,7 +380,12 @@
         <span>Projects</span>
       </a>
 
-      <a routerLink="/epics" routerLinkActive="tab-active" class="tab-item">
+      <a
+        routerLink="/epics"
+        routerLinkActive="tab-active"
+        class="tab-item"
+        [class.disabled]="!hasSelectedProject()"
+      >
         <svg
           width="20"
           height="20"
@@ -396,7 +401,12 @@
         <span>Epics</span>
       </a>
 
-      <a routerLink="/tasks" routerLinkActive="tab-active" class="tab-item">
+      <a
+        routerLink="/tasks"
+        routerLinkActive="tab-active"
+        class="tab-item"
+        [class.disabled]="!hasSelectedProject()"
+      >
         <svg
           width="20"
           height="20"

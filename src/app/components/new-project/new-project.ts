@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators, FormGroup } from '@angular/forms';
 import { ApiService } from '../../services/api.service';
@@ -12,6 +12,9 @@ export class NewProject {
   private router = inject(Router);
   private fb = inject(FormBuilder);
   private api = inject(ApiService);
+
+  isLoading = signal(false);
+  errorMessage = signal('');
 
   form: FormGroup = this.fb.group({
     title: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
@@ -38,12 +41,24 @@ export class NewProject {
   back(): void {
     this.router.navigate(['/projects']);
   }
-  onSubmit(): void {
-    if (this.form.valid) {
+ async onSubmit(): Promise<void> {
+    if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
     }
-    console.log('Create new project', this.form.value);
-    this.router.navigate(['/projects']);
+    this.isLoading.set(true);
+    this.errorMessage.set('');
+    try {
+      await this.api.createProject({
+        name:        this.form.value.title,
+        description: this.form.value.description
+      });
+      this.router.navigate(['/project']);
+    } catch (err: any) {
+      this.errorMessage.set(err.error?.message || 'Something went wrong.');
+    } finally {
+      this.isLoading.set(false);
+    }
   }
-}
+  }
+

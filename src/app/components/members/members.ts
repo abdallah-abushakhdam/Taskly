@@ -1,7 +1,8 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, OnInit, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
-
+import { ApiService } from '../../services/api.service';
+import { LoadingService } from '../../services/loading.service';
 interface Member {
   id: string;
   name: string;
@@ -10,40 +11,67 @@ interface Member {
   color: string;
 }
 
+interface Project {
+  id: string;
+  name: string;
+}
+
 @Component({
   selector: 'app-members',
   imports: [RouterLink, CommonModule],
   templateUrl: './members.html',
   styleUrl: './members.css',
 })
-export class Members {
-  members = signal<Member[]>([
-    {
-      id: '1',
-      name: 'Mahmoud Taha',
-      email: 'mahmoud.taha.dev@gmail.com',
-      role: 'owner',
-      color: '#0D3086',
-    },
-    {
-      id: '2',
-      name: 'Sarah Jenkins',
-      email: 's.jenkins@workspace.com',
-      role: 'admin',
-      color: '#00D9A0',
-    },
-    { id: '3', name: 'David Lee', email: 'd.lee@workspace.com', role: 'member', color: '#4060D0' },
-    {
-      id: '4',
-      name: 'Alisa Mayer',
-      email: 'a.mayer@workspace.com',
-      role: 'viewer',
-      color: '#B0C2E8',
-    },
-  ]);
-  openMenuId = signal<string | null>(null);
+export class Members implements OnInit {
+  private api = inject(ApiService);
+  private loading = inject(LoadingService);
+
+  isLoading = this.loading.isLoading;
+  hasError = signal(false);
   showInviteModal = signal(false);
   inviteEmail = signal('');
+  openMenuId = signal<string | null>(null);
+
+  selectedProject = signal<Project | null>(null);
+  members = signal<Member[]>([]);
+
+  ngOnInit(): void {
+    const raw = localStorage.getItem('selected_project');
+    if (raw) {
+      const project = JSON.parse(raw);
+      this.selectedProject.set(project);
+      this.loadMembers(project.id);
+    }
+  }
+
+  async loadMembers(projectId: string): Promise<void> {
+    this.hasError.set(false);
+    try {
+      const data = await this.api.getProjectMembers(projectId);
+      console.log('Members data:', data);
+      this.members.set(
+        data.map((m: any) => ({
+          id: m.id,
+          name: m.metadata?.name || m.email,
+          email: m.email || '',
+          role: m.role?.toLowerCase() || 'member',
+          color: this.getColor(m.role),
+        })),
+      );
+    } catch {
+      this.hasError.set(true);
+    }
+  }
+
+  getColor(role: string): string {
+    const colors: Record<string, string> = {
+      OWNER: '#0D3086',
+      ADMIN: '#00D9A0',
+      MEMBER: '#4060D0',
+      VIEWER: '#B0C2E8',
+    };
+    return colors[role] || '#4060D0';
+  }
 
   getInitials(name: string): string {
     return name
@@ -55,7 +83,7 @@ export class Members {
   }
 
   toggleMenu(id: string): void {
-    this.openMenuId.update((currentId) => (currentId === id ? null : id));
+    this.openMenuId.update((current) => (current === id ? null : id));
   }
 
   inviteMember(): void {
@@ -64,9 +92,21 @@ export class Members {
 
   closeModal(): void {
     this.showInviteModal.set(false);
+    this.inviteEmail.set('');
   }
 
-  sendInvite(): void {
-    this.showInviteModal.set(false);
+  async sendInvitation(): Promise<void> {
+    if (!this.inviteEmail()) return;
+
+    this.isLoading.set(true);
+    try {
+      await this.api.inviteMember(this.inviteEmail(), this.selectedProject()!.id);
+      this.closeModal();
+      await this.loadMembers(this.selectedProject()!.id);
+    } catch (err: any) {
+      console.log('Invite error:', err);
+    } finally {
+      this.isLoading.set(false);
+    }
   }
 }

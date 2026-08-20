@@ -3,7 +3,7 @@
   <div class="breadcrumb">
     <a routerLink="/project" class="breadcrumb-link">PROJECTS</a>
     <span class="breadcrumb-sep">›</span>
-    <span class="breadcrumb-link">PROJECT NAME</span>
+    <span class="breadcrumb-link">{{ selectedProject()?.name }}</span>
     <span class="breadcrumb-sep">›</span>
     <span class="breadcrumb-current">EPICS</span>
   </div>
@@ -455,7 +455,7 @@
                 <line x1="8" y1="2" x2="8" y2="6" />
                 <line x1="3" y1="10" x2="21" y2="10" />
               </svg>
-              <span class="meta-value">Oct 15, 2025</span>
+              <span class="meta-value">{{ selectedEpic()!.deadline }}</span>
               <svg
                 width="12"
                 height="12"

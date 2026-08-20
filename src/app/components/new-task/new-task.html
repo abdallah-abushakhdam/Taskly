@@ -57,10 +57,11 @@
           <label>STATUS <span class="required">*</span></label>
           <div class="select-wrap">
             <select formControlName="status">
-              <option value="todo">TO DO</option>
-              <option value="in-progress">IN PROGRESS</option>
-              <option value="done">DONE</option>
-              <option value="blocked">BLOCKED</option>
+              <option value="TO_DO">TO DO</option>
+              <option value="IN_PROGRESS">IN PROGRESS</option>
+              <option value="BLOCKED">BLOCKED</option>
+              <option value="COMPLETED">COMPLETED</option>
+              <option value="URGENT">URGENT</option>
             </select>
             <svg
               class="select-arrow"
@@ -82,11 +83,12 @@
           <label>ASSIGNEE</label>
           <div class="select-wrap">
             <select formControlName="assignee">
-              <option value="">Select Team Member</option>
-              <option value="alice">Alice Moore</option>
-              <option value="sarah">Sarah Jenkins</option>
-              <option value="david">David Lee</option>
-              <option value="alisa">Alisa Mayer</option>
+              <option value="" disabled hidden selected>Select Team Member</option>
+              @for (member of members(); track member.user_id) {
+                <option [value]="member.user_id">
+                  {{ member.metadata?.name || member.email }}
+                </option>
+              }
             </select>
             <svg
               class="select-arrow"
@@ -111,7 +113,9 @@
         <div class="select-wrap">
           <select formControlName="epic">
             <option value="">Select Epic Link</option>
-            <option value="epic-102">EPIC-102 - Sustainable Materials Integration</option>
+            @for (epic of epics(); track epic.id) {
+              <option [value]="epic.id">{{ epic.title }}</option>
+            }
           </select>
           <svg
             class="select-arrow"

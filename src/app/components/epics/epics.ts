@@ -1,6 +1,8 @@
 import { Component, computed, inject, signal, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { filter, single } from 'rxjs';
+import { Router, ActivatedRoute, RouterLink } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { ApiService } from '../../services/api.service';
+import { LoadingService } from '../../services/loading.service';
 
 interface Epic {
   id: string;
@@ -11,133 +13,37 @@ interface Epic {
   assigneeColor: string;
   createdBy: string;
   createdAt: string;
+  deadline: string;
+  description: string;
 }
-
-const MOCK_EPICS: Epic[] = [
-  {
-    id: '1',
-    code: 'EPIC-102',
-    title: 'Sustainable Materials Integration',
-    assigneeName: 'Alice Moore',
-    assigneeInitials: 'AM',
-    assigneeColor: '#65DCA4',
-    createdBy: 'Sarah Jenkins',
-    createdAt: '22 Oct 2025',
-  },
-  {
-    id: '2',
-    code: 'EPIC-102',
-    title: 'Sustainable Materials Integration',
-    assigneeName: 'Alice Moore',
-    assigneeInitials: 'AM',
-    assigneeColor: '#65DCA4',
-    createdBy: 'Sarah Jenkins',
-    createdAt: '22 Oct 2025',
-  },
-  {
-    id: '3',
-    code: 'EPIC-102',
-    title: 'Sustainable Materials Integration',
-    assigneeName: 'Alice Moore',
-    assigneeInitials: 'AM',
-    assigneeColor: '#65DCA4',
-    createdBy: 'Sarah Jenkins',
-    createdAt: '22 Oct 2025',
-  },
-  {
-    id: '4',
-    code: 'EPIC-102',
-    title: 'Sustainable Materials Integration',
-    assigneeName: 'Alice Moore',
-    assigneeInitials: 'AM',
-    assigneeColor: '#65DCA4',
-    createdBy: 'Sarah Jenkins',
-    createdAt: '22 Oct 2025',
-  },
-  {
-    id: '5',
-    code: 'EPIC-102',
-    title: 'Sustainable Materials Integration',
-    assigneeName: 'Alice Moore',
-    assigneeInitials: 'AM',
-    assigneeColor: '#65DCA4',
-    createdBy: 'Sarah Jenkins',
-    createdAt: '22 Oct 2025',
-  },
-  {
-    id: '6',
-    code: 'EPIC-102',
-    title: 'Sustainable Materials Integration',
-    assigneeName: 'Alice Moore',
-    assigneeInitials: 'AM',
-    assigneeColor: '#65DCA4',
-    createdBy: 'Sarah Jenkins',
-    createdAt: '22 Oct 2025',
-  },
-  {
-    id: '7',
-    code: 'EPIC-102',
-    title: 'Sustainable Materials Integration',
-    assigneeName: 'Alice Moore',
-    assigneeInitials: 'AM',
-    assigneeColor: '#65DCA4',
-    createdBy: 'Sarah Jenkins',
-    createdAt: '22 Oct 2025',
-  },
-  {
-    id: '8',
-    code: 'EPIC-102',
-    title: 'Sustainable Materials Integration',
-    assigneeName: 'Alice Moore',
-    assigneeInitials: 'AM',
-    assigneeColor: '#65DCA4',
-    createdBy: 'Sarah Jenkins',
-    createdAt: '22 Oct 2025',
-  },
-];
+interface Project {
+  id: string;
+  name: string;
+}
 
 @Component({
   selector: 'app-epics',
-  imports: [],
+  imports: [CommonModule, RouterLink],
   templateUrl: './epics.html',
   styleUrl: './epics.css',
 })
-export class Epics {
+export class Epics implements OnInit {
+  private api = inject(ApiService);
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
+  private loading = inject(LoadingService);
 
+  isLoading = this.loading.isLoading;
+  hasError = signal(false);
   searchQuery = signal('');
   currentPage = signal(1);
   itemsPerPage = 6;
-
-  isLoading = signal(true);
-  hasError = signal(false);
-
-  selectedEpic = signal<Epic | null>(null);
-
   skeletonItems = Array(6).fill(0);
 
-  openEpic(epic: Epic): void {
-    this.selectedEpic.set(epic);
-  }
-
-  closeEpic() {
-    this.selectedEpic.set(null);
-  }
-
-  ngOnInit(): void {
-    this.loadEpics();
-  }
-
-  loadEpics(): void {
-    this.isLoading.set(true);
-    this.hasError.set(false);
-    setTimeout(() => {
-      this.allEpics.set(MOCK_EPICS);
-      this.isLoading.set(false);
-    }, 1500);
-  }
-
-  allEpics = signal<Epic[]>(MOCK_EPICS);
+  projectId = signal('');
+  selectedProject = signal<Project | null>(null);
+  allEpics = signal<Epic[]>([]);
+  selectedEpic = signal<Epic | null>(null);
 
   filteredEpics = computed(() => {
     const q = this.searchQuery().toLowerCase();
@@ -159,21 +65,118 @@ export class Epics {
     return this.filteredEpics().slice(start, start + this.itemsPerPage);
   });
 
+  ngOnInit(): void {
+    console.log('Epics ngOnInit - selected_project:', localStorage.getItem('selected_project'));
+
+    const projectId = this.route.snapshot.params['projectId'];
+
+    if (projectId) {
+      // came from clicking a project
+      this.projectId.set(projectId);
+    } else {
+      // came from sidebar — read from localStorage
+      const raw = localStorage.getItem('selected_project');
+      if (raw) {
+        const project = JSON.parse(raw);
+        this.projectId.set(project.id);
+        this.selectedProject.set(project);
+      }
+    }
+
+    const raw = localStorage.getItem('selected_project');
+    if (raw) {
+      this.selectedProject.set(JSON.parse(raw));
+    }
+
+    if (this.projectId()) {
+      this.loadEpics(this.projectId());
+    } else {
+      this.router.navigate(['/project']);
+    }
+  }
+
+  async loadEpics(projectId: string): Promise<void> {
+    this.hasError.set(false);
+
+    try {
+      const data = await this.api.getProjectEpics(projectId);
+      const members = await this.api.getProjectMembers(projectId);
+      const currentUser = JSON.parse(localStorage.getItem('taskly_user') || '{}');
+
+      this.allEpics.set(
+        data.map((e: any) => {
+          const assignee = members.find((m: any) => m.user_id === e.assignee_id);
+          const creator = members.find((m: any) => m.user_id === e.created_by);
+
+          return {
+            id: e.id,
+            code: e.epic_id || `EPIC-${e.id.slice(0, 3).toUpperCase()}`,
+            title: e.title,
+            assigneeName: assignee?.metadata?.name || currentUser.name || 'Unassigned',
+            assigneeInitials: this.getInitials(
+              assignee?.metadata?.name || currentUser.name || 'UN',
+            ),
+            assigneeColor: '#65DCA4',
+            createdBy: creator?.metadata?.name || currentUser.name || 'Unknown',
+            createdAt: this.formatDate(e.created_at),
+            deadline: e.deadline ? this.formatDate(e.deadline) : 'No deadline',
+            description: e.description || '',
+          };
+        }),
+      );
+    } catch {
+      this.hasError.set(true);
+    }
+  }
+
+  formatDate(dateStr: string): string {
+    if (!dateStr) return '';
+    return new Date(dateStr).toLocaleDateString('en-GB', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric',
+    });
+  }
+
+  retry(): void {
+    this.loadEpics(this.projectId());
+  }
+
   goToPage(page: number): void {
-    if (page >= 1 && page < this.totalPages()) {
+    if (page >= 1 && page <= this.totalPages()) {
       this.currentPage.set(page);
     }
   }
 
   onSearch(event: Event): void {
     this.searchQuery.set((event.target as HTMLInputElement).value);
+    this.currentPage.set(1);
   }
 
-  createEpic(): void {
-    this.router.navigate(['/epics/new']);
+  openEpic(epic: Epic): void {
+    this.selectedEpic.set(epic);
+  }
+
+  getInitials(name: string): string {
+    if (!name) return 'UN';
+    return name
+      .split(' ')
+      .map((n: string) => n[0])
+      .join('')
+      .toUpperCase()
+      .slice(0, 2);
+  }
+
+  closeEpic(): void {
+    this.selectedEpic.set(null);
   }
 
   addTask(): void {
+    this.closeEpic();
     this.router.navigate(['/tasks/new']);
+  }
+
+  createEpic(): void {
+    this.router.navigate(['/project', this.projectId(), 'epics', 'new']);
   }
 }

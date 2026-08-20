@@ -209,6 +209,12 @@
   line-height: 1;
 }
 
+.nav-item.disabled {
+  opacity: 0.4;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
 /* ─── Avatar ────────────────────────────────────── */
 .avatar {
   width: 2.25rem;
