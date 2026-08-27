@@ -129,6 +129,23 @@ export class Epics implements OnInit {
     }
   }
 
+  async updateEpicField(field: string, value: string): Promise<void> {
+    if (!this.selectedEpic()) return;
+    if (value === this.selectedEpic()![field as keyof Epic]) return;
+
+    try {
+      await this.api.updateEpic(this.selectedEpic()!.id, {
+        [field]: value,
+      });
+      this.selectedEpic.update((e) => (e ? { ...e, [field]: value } : null));
+      this.allEpics.update((epics) =>
+        epics.map((e) => (e.id === this.selectedEpic()?.id ? { ...e, [field]: value } : e)),
+      );
+    } catch (err) {
+      console.log('Update epic error:', err);
+    }
+  }
+
   formatDate(dateStr: string): string {
     if (!dateStr) return '';
     return new Date(dateStr).toLocaleDateString('en-GB', {

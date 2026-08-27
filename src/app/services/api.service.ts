@@ -229,9 +229,24 @@ export class ApiService {
     );
   }
 
-  async updateTaskStatus(taskId: string, status: string): Promise<any> {
+  async updateTask(
+    id: string,
+    data: {
+      title?: string;
+      description?: string;
+      status?: string;
+      assigneeId?: string;
+      dueDate?: string;
+    },
+  ): Promise<any> {
     return firstValueFrom(
-      this.http.patch<any>(`${BASE_URL}/rest/v1/tasks?id=eq.${taskId}`, { status }),
+      this.http.patch<any>(`${BASE_URL}/rest/v1/tasks?id=eq.${id}`, {
+        title: data.title,
+        description: data.description,
+        status: data.status,
+        assignee_id: data.assigneeId,
+        due_date: data.dueDate,
+      }),
     );
   }
 
@@ -261,6 +276,25 @@ export class ApiService {
     return firstValueFrom(
       this.http.post<any>(`${BASE_URL}/rest/v1/rpc/accept_invitation`, {
         p_token: token,
+      }),
+    );
+  }
+
+  async updateEpic(
+    id: string,
+    data: {
+      title?: string;
+      description?: string;
+      assigneeId?: string;
+      deadline?: string;
+    },
+  ): Promise<any> {
+    return firstValueFrom(
+      this.http.patch<any>(`${BASE_URL}/rest/v1/epics?id=eq.${id}`, {
+        title: data.title,
+        description: data.description,
+        assignee_id: data.assigneeId,
+        deadline: data.deadline,
       }),
     );
   }

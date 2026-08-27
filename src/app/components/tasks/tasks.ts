@@ -155,15 +155,31 @@ export class Tasks implements OnInit {
     const apiStatus = this.reverseMapStatus(status);
 
     try {
-      await this.api.updateTaskStatus(taskId, apiStatus);
+      await this.api.updateTask(taskId, { status: apiStatus });
       this.selectedTask.update((t) => (t ? { ...t, status } : null));
-      // update in the list too
       this.allTasks.update((tasks) => tasks.map((t) => (t.id === taskId ? { ...t, status } : t)));
     } catch (err) {
       console.log('Failed to update status:', err);
     }
 
     this.statusMenuOpen.set(false);
+  }
+
+  async updateTaskField(field: string, value: string): Promise<void> {
+    if (!this.selectedTask()) return;
+    if (value === this.selectedTask()![field as keyof Task]) return;
+
+    const taskId = this.selectedTask()!.id;
+
+    try {
+      await this.api.updateTask(taskId, { [field]: value });
+      this.selectedTask.update((t) => (t ? { ...t, [field]: value } : null));
+      this.allTasks.update((tasks) =>
+        tasks.map((t) => (t.id === taskId ? { ...t, [field]: value } : t)),
+      );
+    } catch (err) {
+      console.log('Update task error:', err);
+    }
   }
 
   reverseMapStatus(status: Task['status']): string {

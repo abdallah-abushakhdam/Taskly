@@ -398,11 +398,23 @@
         </div>
 
         <!-- Title -->
-        <h2 class="modal-title">{{ selectedEpic()!.title }}</h2>
+        <input
+          class="modal-title-input"
+          [value]="selectedEpic()!.title"
+          (blur)="updateEpicField('title', $any($event.target).value)"
+          placeholder="Epic title"
+        />
 
         <!-- Description -->
-        <div class="modal-description">
-          <p>A comprehensive review and upgrade of the core architectural frameworks.</p>
+        <div class="modal-description-section">
+          <p class="modal-section-label"></p>
+          <textarea
+            class="modal-description-input"
+            [value]="selectedEpic()!.description"
+            (blur)="updateEpicField('description', $any($event.target).value)"
+            placeholder="Add a description..."
+            rows="4"
+          ></textarea>
         </div>
 
         <!-- Meta Row -->

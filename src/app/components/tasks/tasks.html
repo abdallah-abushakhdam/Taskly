@@ -546,15 +546,23 @@
                 </svg>
               </button>
             </div>
-            <h2 class="modal-title">{{ selectedTask()!.title }}</h2>
+            <input
+              class="modal-title-input"
+              [value]="selectedTask()!.title"
+              (blur)="updateTaskField('title', $any($event.target).value)"
+              placeholder="Task title"
+            />
           </div>
 
           <!-- Part 2: Description -->
-          <div class="modal-description-section">
-            <p class="modal-section-label">DESCRIPTION</p>
-            <div class="modal-description">
-              <p>{{ selectedTask()!.description || 'No description provided.' }}</p>
-            </div>
+          <div class="modal-description">
+            <textarea
+              class="modal-description-input"
+              [value]="selectedTask()!.description"
+              (blur)="updateTaskField('description', $any($event.target).value)"
+              placeholder="Add a description..."
+              rows="5"
+            ></textarea>
           </div>
 
           <!-- Part 3: Footer -->
